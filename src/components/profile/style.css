@@ -1,0 +1,10 @@
+.ant-upload-drag {
+  height: 8rem !important;
+  width: 8rem !important;
+  border: none !important;
+  border-radius: 50rem !important;
+}
+
+.ant-upload-list-text {
+  display: none;
+}

@@ -18,7 +18,7 @@ const Chat = ({ name, profilePic, onClick }) => {
         </div>
         <div className="flex gap-1 text-gray-400 text-xs">
           <span className="flex text-base">
-            <ion-icon name="checkmark-done-outline"></ion-icon>
+            <ion-icon name="checkmark-done-outline" />
           </span>
           <span>Hi</span>
         </div>

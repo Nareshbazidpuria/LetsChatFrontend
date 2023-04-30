@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutApi } from "../../apis";
 import { message } from "antd";
 
@@ -18,17 +18,22 @@ const PopoverContent = () => {
   };
   return (
     <div className="w-24">
-      <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1">
+      <Link to="/profile">
+        <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1">
+          <span className="flex text-lg">
+            <ion-icon name="person-circle-outline" />
+          </span>
+          <span>Profile</span>
+        </div>
+      </Link>
+      <div
+        className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1"
+        onClick={logout}
+      >
         <span className="flex text-lg">
-          <ion-icon name="person-circle-outline"></ion-icon>
+          <ion-icon name="log-out-outline" />
         </span>
-        <span>Profile</span>
-      </div>
-      <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1">
-        <span className="flex text-lg">
-          <ion-icon name="log-out-outline"></ion-icon>
-        </span>
-        <span onClick={logout}>Logout</span>
+        <span>Logout</span>
       </div>
     </div>
   );

@@ -15,8 +15,8 @@ const Login = () => {
         localStorage.setItem("accessToken", response?.data?.data?.accessToken);
         const profile = await getProfileApi();
         if (profile?.status === 200) {
-          localStorage.setItem("user", JSON.stringify(profile?.data?.data));
           message.success(response?.data?.message);
+          localStorage.setItem("user", JSON.stringify(profile?.data?.data));
           navigate("/");
         } else message.error(profile?.data?.message);
       } else message.error(response?.data?.message);
@@ -44,7 +44,7 @@ const Login = () => {
           Login
         </div>
         <Form
-          name="normal_login"
+          name="login"
           className="login-form"
           initialValues={{
             remember: true,

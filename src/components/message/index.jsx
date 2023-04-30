@@ -10,7 +10,7 @@ const Message = ({ msg, time, type }) => {
       <p>{msg}</p>
       <span className="flex gap-1 text-xs text-gray-400 float-right">
         <span className="flex text-base text-sky-400">
-          <ion-icon name="checkmark-done-outline"></ion-icon>
+          <ion-icon name="checkmark-done-outline" />
         </span>
         <span className="text-xs">{time}</span>
       </span>

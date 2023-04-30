@@ -55,6 +55,7 @@ const Home = () => {
     if (!selectedUser?.userName && users?.length) {
       setSelectedUser(users[0]);
     }
+    // eslint-disable-next-line
   }, [users]);
   useEffect(() => {
     typeMessage?.current?.focus();
@@ -69,7 +70,7 @@ const Home = () => {
           <div className="flex justify-between items-center">
             <span className="text-2xl">Chats</span>
             <span className="flex">
-              <ion-icon name="ellipsis-horizontal"></ion-icon>
+              <ion-icon name="ellipsis-horizontal" />
             </span>
           </div>
           <Input placeholder="Search" onPressEnter={search} />
@@ -91,80 +92,84 @@ const Home = () => {
       {/* Right Part  */}
       <div className="border border-l-0 w-3/4 relative">
         {/* Chat Header  */}
-        <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
-          <Tooltip title="Info">
-            <div className="flex gap-3 cursor-pointer">
-              <img
-                className="h-14 rounded-full"
-                src={selectedUser?.profilePic || profile}
-                alt=""
-              />
-              <div className="flex flex-col">
-                <span className="text-xl">{selectedUser?.name}</span>
-                <span className="text-gray-500 text-sm">Online</span>
+        {selectedUser?.userName && (
+          <>
+            <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
+              <Tooltip title="Info">
+                <div className="flex gap-3 cursor-pointer">
+                  <img
+                    className="h-14 rounded-full"
+                    src={selectedUser?.profilePic || profile}
+                    alt=""
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-xl">{selectedUser?.name}</span>
+                    <span className="text-gray-500 text-sm">Online</span>
+                  </div>
+                </div>
+              </Tooltip>
+              <div className="flex gap-5 text-2xl text-gray-500">
+                <Tooltip title="Video Call">
+                  <span className="flex cursor-pointer">
+                    <ion-icon name="videocam-outline" />
+                  </span>
+                </Tooltip>
+                <Tooltip title="Call">
+                  <span className="flex cursor-pointer">
+                    <ion-icon name="call-outline" />
+                  </span>
+                </Tooltip>
               </div>
             </div>
-          </Tooltip>
-          <div className="flex gap-5 text-2xl text-gray-500">
-            <Tooltip title="Video Call">
-              <span className="flex cursor-pointer">
-                <ion-icon name="videocam-outline"></ion-icon>
-              </span>
-            </Tooltip>
-            <Tooltip title="Call">
-              <span className="flex cursor-pointer">
-                <ion-icon name="call-outline"></ion-icon>
-              </span>
-            </Tooltip>
-          </div>
-        </div>
-        {/* Chat Body  */}
-        <div
-          id="chat-body"
-          ref={chatBody}
-          className="relative px-5 py-2 overflow-auto"
-        >
-          <img src={wallpaper} alt="" />
-          {messages?.map((message) => (
-            <Message
-              key={message?.msg + message?.time}
-              type={message?.type}
-              msg={message?.msg}
-              time={moment(message?.time)?.format("hh:mm A")}
-            />
-          ))}
-        </div>
-        {/* Chat Footer  */}
-        <div className="flex justify-around items-center text-2xl text-gray-500 py-5 border-t bg-white sticky bottom-0">
-          <div className="cursor-pointer">
-            <ion-icon name="happy-outline"></ion-icon>
-          </div>
-          <div className="rotate-45 cursor-pointer">
-            <ion-icon name="attach-outline"></ion-icon>
-          </div>
-          <Input
-            className="w-5/6"
-            ref={typeMessage}
-            id="type-message"
-            placeholder="Type a message"
-            value={msg}
-            onChange={onChange}
-            onPressEnter={() => send(msg)}
-          />
-          {msg ? (
+            {/* Chat Body  */}
             <div
-              className="-rotate-45 cursor-pointer"
-              style={{ color: "var(--primary)" }}
-              onClick={() => send(msg)}
+              id="chat-body"
+              ref={chatBody}
+              className="relative px-5 py-2 overflow-auto"
             >
-              <ion-icon name="send"></ion-icon>
+              <img src={wallpaper} alt="" />
+              {messages?.map((message) => (
+                <Message
+                  key={message?.msg + message?.time}
+                  type={message?.type}
+                  msg={message?.msg}
+                  time={moment(message?.time)?.format("hh:mm A")}
+                />
+              ))}
             </div>
-          ) : (
-            <div className="cursor-pointer">
-              <ion-icon name="mic-outline"></ion-icon>
+            {/* Chat Footer  */}
+            <div className="flex justify-around items-center text-2xl text-gray-500 py-5 border-t bg-white sticky bottom-0">
+              <div className="cursor-pointer">
+                <ion-icon name="happy-outline" />
+              </div>
+              <div className="rotate-45 cursor-pointer">
+                <ion-icon name="attach-outline" />
+              </div>
+              <Input
+                className="w-5/6"
+                ref={typeMessage}
+                id="type-message"
+                placeholder="Type a message"
+                value={msg}
+                onChange={onChange}
+                onPressEnter={() => send(msg)}
+              />
+              {msg ? (
+                <div
+                  className="cursor-pointer"
+                  style={{ color: "var(--primary)" }}
+                  onClick={() => send(msg)}
+                >
+                  <ion-icon name="paper-plane-outline" />
+                </div>
+              ) : (
+                <div className="cursor-pointer">
+                  <ion-icon name="mic-outline" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

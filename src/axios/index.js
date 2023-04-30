@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// export const BaseUrl = "http://13.56.84.4:3000"
 export const BaseUrl =
   process.env.REACT_APP_PORT === "DEV"
     ? process.env.REACT_APP_DEV_URL
