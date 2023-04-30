@@ -1,0 +1,30 @@
+.login {
+  height: calc(max(100vh, 40rem));
+}
+
+.ant-input-affix-wrapper, .ant-form-item-control-input .ant-btn {
+  padding: 1rem !important;
+  border-radius: 0;
+  font-size: 1.1rem;
+}
+
+.ant-form-item-control-input .ant-btn {
+  padding: 0 4rem !important;
+  height: 3.5rem !important;
+  background: var(--primary);
+  color: #fff;
+}
+
+.ant-form-item-control-input .ant-btn:hover {
+  color: var(--primary);
+  background: #fff;
+  border-color: var(--primary);
+}
+
+.ant-input-prefix {
+  margin-right: 1rem !important;
+}
+
+.ant-input-affix-wrapper:focus-within, .ant-input-affix-wrapper:hover {
+  border-color: var(--primary) !important;
+}
