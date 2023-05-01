@@ -5,6 +5,9 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Edit from "./Edit";
 import "./style.css";
 import General from "./General";
+import Security from "./Security";
+import Preference from "./Preference";
+import Settings from "./Settings";
 
 const Profile = () => {
   let location = useLocation();
@@ -59,31 +62,13 @@ const Profile = () => {
           onClick={() => setActive("settings")}
         />
       </div>
-      <div className="border border-l-0 w-3/4 relative">
+      <div className="border border-l-0 w-3/4 relative bg-slate-50">
         <Routes>
           <Route key="general" path="/" element={<General />} />
           <Route key="edit" path="/edit" element={<Edit />} />
-          <Route
-            key="security"
-            path="/security"
-            element={
-              <div className="text-3xl bg-slate-50 px-10 py-5">Security</div>
-            }
-          />
-          <Route
-            key="preference"
-            path="/preference"
-            element={
-              <div className="text-3xl bg-slate-50 px-10 py-5">Preference</div>
-            }
-          />
-          <Route
-            key="settings"
-            path="/settings"
-            element={
-              <div className="text-3xl bg-slate-50 px-10 py-5">Settings</div>
-            }
-          />
+          <Route key="security" path="/security" element={<Security />} />
+          <Route key="preference" path="/preference" element={<Preference />} />
+          <Route key="settings" path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </div>

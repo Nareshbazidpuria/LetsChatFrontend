@@ -1,8 +1,8 @@
-import profile from "../../assets/img/profile.png";
 import { message } from "antd";
 import { getProfileApi } from "../../apis";
 import { useEffect, useState } from "react";
-import { BaseUrl } from "../../axios";
+import { Link } from "react-router-dom";
+import Cover from "./Cover";
 
 const General = () => {
   const [user, setUser] = useState();
@@ -24,38 +24,24 @@ const General = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="text-3xl bg-slate-50 px-10 py-5">General</div>
-      <div className="px-10 py-4">
-        <img
-          className=" h-32 w-32 border-2 border-sky-600 rounded-full"
-          src={user?.profilePic ? BaseUrl + user.profilePic : profile}
-          alt=""
-        />
-      </div>
-      <div className="text-lg px-10">
-        <table>
-          <tr>
-            <td>Name</td>
-            <td className="px-3">:</td>
-            <td>{user?.name}</td>
-          </tr>
-          <tr>
-            <td>Username</td>
-            <td className="px-3">:</td>
-            <td>{user?.userName}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td className="px-3">:</td>
-            <td>{user?.email || "Not associated"}</td>
-          </tr>
-          <tr>
-            <td>Friends</td>
-            <td className="px-3">:</td>
-            <td>{user?.friends?.length || 0} friends</td>
-          </tr>
-        </table>
+    <div
+      className="flex flex-col gap-4 bg-white m-3 rounded-xl overflow-hidden shadow"
+      style={{ minHeight: "calc(100vh - 5.5rem)" }}
+    >
+      <Cover user={user} />
+      <div className="text-lg px-6 mt-14">
+        <div className="font-bold text-2xl">{user?.name}</div>
+        <div className="text-gray-400">{user?.userName}</div>
+        <div className="text-gray-400 text-sm">{user?.email}</div>
+        <div className="text-sm flex flex-col items-center w-32 bg-slate-100 my-3 p-2 rounded-lg">
+          <span>{user?.friends?.length || 0}</span>
+          <span>Friends</span>
+        </div>
+        <Link to="/profile/edit">
+          <div className="bg-sky-500 text-white px-5 py-2 mt-4 rounded w-32 cursor-pointer text-base">
+            Edit Profile
+          </div>
+        </Link>
       </div>
     </div>
   );
