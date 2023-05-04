@@ -1,5 +1,6 @@
 import { Input, Tooltip } from "antd";
 import profile from "../../assets/img/profile.png";
+import random from "../../assets/img/random.gif";
 import wallpaper from "../../assets/img/wallpaper.png";
 import "./style.css";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +9,7 @@ import Message from "../message";
 import moment from "moment/moment";
 import { MESSAGE_TYPE } from "../../constant";
 import { getUsersApi } from "../../apis";
+import { BaseUrl } from "../../axios";
 
 const Home = () => {
   const typeMessage = useRef();
@@ -74,16 +76,30 @@ const Home = () => {
             </span>
           </div>
           <Input placeholder="Search" onPressEnter={search} />
+          <Chat
+            name="Anonymous Users"
+            profilePic={random}
+            annonymous={true}
+            onClick={() =>
+              setSelectedUser({
+                name: "Anonymous Users",
+                profilePic: random,
+                userName: "random",
+              })
+            }
+          />
         </div>
         <div
           className="overflow-auto"
-          style={{ height: "calc(max(100vh - 10.25rem  , 29.75rem))" }}
+          style={{ height: "calc(max(100vh - 16rem  , 25.5rem))" }}
         >
           {users?.map((user) => (
             <Chat
               key={user?.userName}
+              active={selectedUser?.userName === user?.userName}
               name={user?.name}
-              profilePic={user?.profilePic}
+              profilePic={user?.profilePic && BaseUrl + user?.profilePic}
+              lastMsg={{ text: "Hi", time: "10:10" }}
               onClick={() => setSelectedUser(user)}
             />
           ))}
@@ -98,8 +114,12 @@ const Home = () => {
               <Tooltip title="Info">
                 <div className="flex gap-3 cursor-pointer">
                   <img
-                    className="h-14 rounded-full"
-                    src={selectedUser?.profilePic || profile}
+                    className="h-14 w-14 rounded-full"
+                    src={
+                      selectedUser?.profilePic
+                        ? BaseUrl + selectedUser?.profilePic
+                        : profile
+                    }
                     alt=""
                   />
                   <div className="flex flex-col">

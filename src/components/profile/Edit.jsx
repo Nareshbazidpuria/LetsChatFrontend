@@ -81,18 +81,18 @@ const Edit = () => {
           </div>
         ) : (
           <img
-            className="absolute top-36 h-32 w-32 border-2 border-dotted border-sky-600 rounded-full cursor-pointer"
+            className="absolute bg-white top-36 h-32 w-32 border-2 border-dotted border-sky-600 rounded-full cursor-pointer"
             src={profilePic || profile}
             alt=""
           />
         )}
         <Form.Item className="absolute top-36">
-          <Form.Item
-            name="dragger"
-            valuePropName="fileList"
-            getValueFromEvent={""}
-          >
-            <Upload.Dragger name="file" customRequest={uploadImage}>
+          <Form.Item name="dragger" valuePropName="fileList">
+            <Upload.Dragger
+              name="file"
+              customRequest={uploadImage}
+              accept="image/png, image/jpeg, image/jpg"
+            >
               <Tooltip title="Click or drag file to upload">
                 <div
                   className="absolute top-0 z-10 h-32 w-32 text-3xl text-white cursor-pointer rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-all"
