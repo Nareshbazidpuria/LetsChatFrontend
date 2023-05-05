@@ -1,10 +1,11 @@
 import { Input, Tooltip } from "antd";
 import profile from "../../assets/img/profile.png";
+import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
 import wallpaper from "../../assets/img/wallpaper.png";
 import "./style.css";
 import { useEffect, useRef, useState } from "react";
-import Chat from "../Chat";
+import Chat from "../chat";
 import Message from "../message";
 import moment from "moment/moment";
 import { MESSAGE_TYPE } from "../../constant";
@@ -59,6 +60,7 @@ const Home = () => {
     }
     // eslint-disable-next-line
   }, [users]);
+
   useEffect(() => {
     typeMessage?.current?.focus();
     getUsers();
@@ -122,6 +124,13 @@ const Home = () => {
                     }
                     alt=""
                   />
+                  {selectedUser?.userName === "naresh_bazidpuria_63425" && (
+                    <img
+                      className="absolute h-5 w-5 bottom-2 left-14"
+                      src={verified}
+                      alt=""
+                    />
+                  )}
                   <div className="flex flex-col">
                     <span className="text-xl">{selectedUser?.name}</span>
                     <span className="text-gray-500 text-sm">Online</span>
