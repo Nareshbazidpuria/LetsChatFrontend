@@ -11,6 +11,9 @@ import moment from "moment/moment";
 import { MESSAGE_TYPE } from "../../constant";
 import { getUsersApi } from "../../apis";
 import { BaseUrl } from "../../axios";
+import logo from "../../assets/img/logo.png";
+import "../../apis/socket";
+import { socket } from "../../apis/socket";
 
 const Home = () => {
   const typeMessage = useRef();
@@ -20,16 +23,12 @@ const Home = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState({});
 
-  const search = (e) => {
-    console.log(e?.target?.value);
-  };
-
-  const onChange = (e) => {
-    setMsg(e?.target?.value);
-  };
+  const onChange = (e) => setMsg(e?.target?.value);
 
   const send = (text) => {
+    text = text?.trim();
     if (text) {
+      socket.emit("msg", text);
       setMessages([
         ...messages,
         { msg: text, time: new Date(), type: MESSAGE_TYPE.OUTGOING },
@@ -43,28 +42,40 @@ const Home = () => {
     }
   };
 
-  const getUsers = async () => {
+  const getUsers = async (params) => {
     try {
-      const res = await getUsersApi();
-      if (res?.status === 200) {
-        setUsers(res?.data?.data?.data);
-      }
+      const res = await getUsersApi(params);
+      if (res?.status === 200) setUsers(res?.data?.data?.data);
     } catch (error) {
+      setUsers();
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    if (!selectedUser?.userName && users?.length) {
-      setSelectedUser(users[0]);
-    }
-    // eslint-disable-next-line
-  }, [users]);
+  const search = (e) => getUsers({ name: e?.target?.value });
+
+  const listenReceive = () => {
+    socket.on("receive", (msg) => {
+      setMessages([
+        ...messages,
+        { msg, time: new Date(), type: MESSAGE_TYPE.INCOMMING },
+      ]);
+      document.querySelector("#chat-body").scrollTop =
+        chatBody.current?.scrollHeight;
+      setTimeout(() => {
+        document.querySelector("#chat-body").scrollTop =
+          chatBody.current?.scrollHeight + 1000;
+      }, 200);
+    });
+  };
 
   useEffect(() => {
     typeMessage?.current?.focus();
     getUsers();
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => listenReceive());
 
   return (
     <div className="flex" style={{ height: "calc(max(100vh - 4rem , 36rem))" }}>
@@ -77,7 +88,7 @@ const Home = () => {
               <ion-icon name="ellipsis-horizontal" />
             </span>
           </div>
-          <Input placeholder="Search" onPressEnter={search} />
+          <Input placeholder="Search" onChange={search} onPressEnter={search} />
           <Chat
             name="Anonymous Users"
             profilePic={random}
@@ -93,7 +104,7 @@ const Home = () => {
         </div>
         <div
           className="overflow-auto"
-          style={{ height: "calc(max(100vh - 16rem  , 25.5rem))" }}
+          style={{ maxHeight: "calc(max(100vh - 16rem  , 24.25rem))" }}
         >
           {users?.map((user) => (
             <Chat
@@ -110,7 +121,7 @@ const Home = () => {
       {/* Right Part  */}
       <div className="border border-l-0 w-3/4 relative">
         {/* Chat Header  */}
-        {selectedUser?.userName && (
+        {selectedUser?.userName ? (
           <>
             <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
               <Tooltip title="Info">
@@ -196,6 +207,16 @@ const Home = () => {
                   <ion-icon name="mic-outline" />
                 </div>
               )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="h-full flex flex-col justify-center items-center gap-3">
+              <img className="h-32 w-32" src={logo} alt="" />
+              <span className="text-3xl text-gray-600">Let's Chat</span>
+              <span className="text-sm text-gray-600">
+                Make friends & enjoy chat
+              </span>
             </div>
           </>
         )}

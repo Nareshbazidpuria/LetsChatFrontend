@@ -1,9 +1,6 @@
 import axios from "axios";
 
-export const BaseUrl =
-  process.env.REACT_APP_PORT === "DEV"
-    ? process.env.REACT_APP_DEV_URL
-    : process.env.REACT_APP_PROD_URL;
+export const BaseUrl = process.env.REACT_APP_DEV_URL;
 
 const axiosInstance = axios.create({
   baseURL: BaseUrl,

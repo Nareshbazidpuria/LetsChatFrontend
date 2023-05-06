@@ -1,4 +1,4 @@
-import axiosInstance from "../axios";
+import app from "../axios";
 export const ENDPOINT = {
   SIGNUP: "/pub/signup",
   LOGIN: "/pub/login",
@@ -8,30 +8,16 @@ export const ENDPOINT = {
   UPLOAD: "/api/generic/upload",
 };
 
-export const signUpApi = (payload) => {
-  return axiosInstance.post(ENDPOINT.SIGNUP, payload);
-};
+export const signUpApi = (payload) => app.post(ENDPOINT.SIGNUP, payload);
 
-export const loginApi = (payload) => {
-  return axiosInstance.post(ENDPOINT.LOGIN, payload);
-};
+export const loginApi = (payload) => app.post(ENDPOINT.LOGIN, payload);
 
-export const getProfileApi = () => {
-  return axiosInstance.get(ENDPOINT.PROFILE);
-};
+export const getProfileApi = () => app.get(ENDPOINT.PROFILE);
 
-export const updateProfileApi = (payload) => {
-  return axiosInstance.put(ENDPOINT.PROFILE, payload);
-};
+export const updateProfileApi = (payload) => app.put(ENDPOINT.PROFILE, payload);
 
-export const logoutApi = () => {
-  return axiosInstance.post(ENDPOINT.LOGOUT);
-};
+export const logoutApi = () => app.post(ENDPOINT.LOGOUT);
 
-export const getUsersApi = () => {
-  return axiosInstance.get(ENDPOINT.USERS);
-};
+export const getUsersApi = (params) => app.get(ENDPOINT.USERS, { params });
 
-export const uploadImageApi = (formData) => {
-  return axiosInstance.post(ENDPOINT.UPLOAD, formData);
-};
+export const uploadImageApi = (formData) => app.post(ENDPOINT.UPLOAD, formData);
