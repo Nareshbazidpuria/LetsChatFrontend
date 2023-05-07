@@ -1,3 +1,7 @@
+.ant-tabs-content-holder {
+  width: 95% !important;
+}
+
 #chat-body, #chat-body>img {
   height: calc(max(100vh - 13.06rem, 26.94rem));
 }

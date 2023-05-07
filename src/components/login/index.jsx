@@ -4,6 +4,7 @@ import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 import { getProfileApi, loginApi } from "../../apis";
 import { useEffect } from "react";
+import { BaseUrl } from "../../axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +17,9 @@ const Login = () => {
         const profile = await getProfileApi();
         if (profile?.status === 200) {
           message.success(response?.data?.message);
-          localStorage.setItem("user", JSON.stringify(profile?.data?.data));
+          const user = profile?.data?.data
+          if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+          localStorage.setItem("user", JSON.stringify(user));
           navigate("/");
         } else message.error(profile?.data?.message);
       } else message.error(response?.data?.message);

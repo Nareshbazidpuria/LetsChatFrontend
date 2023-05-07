@@ -1,4 +1,4 @@
-import { Input, Tooltip } from "antd";
+import { Input, Tabs, Tooltip } from "antd";
 import profile from "../../assets/img/profile.png";
 import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
@@ -9,19 +9,27 @@ import Chat from "../chat";
 import Message from "../message";
 import moment from "moment/moment";
 import { MESSAGE_TYPE } from "../../constant";
-import { getUsersApi } from "../../apis";
+import { getReqsApi, getUsersApi } from "../../apis";
 import { BaseUrl } from "../../axios";
 import logo from "../../assets/img/logo.png";
 import "../../apis/socket";
 import { socket } from "../../apis/socket";
+import UserTab from "./UserTab";
+import Friends from "./Friends";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedUser } from "../../redux/actions";
+import People from "./People";
+import Requests from "./Requests";
 
 const Home = () => {
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
   const typeMessage = useRef();
   const chatBody = useRef();
   const [msg, setMsg] = useState("");
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [activeTab, setActiveTab] = useState("friends");
 
   const onChange = (e) => setMsg(e?.target?.value);
 
@@ -42,17 +50,26 @@ const Home = () => {
     }
   };
 
-  const getUsers = async (params) => {
+  const getUsers = async (params, type) => {
     try {
-      const res = await getUsersApi(params);
-      if (res?.status === 200) setUsers(res?.data?.data?.data);
+      let res;
+      if (type === "reqs") {
+        res = await getReqsApi(params);
+      } else {
+        res = await getUsersApi(params);
+      }
+      if (res?.status === 200) {
+        const users = res?.data?.data?.data?.map((user) => {
+          if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+          return user;
+        });
+        setUsers(users);
+      }
     } catch (error) {
       setUsers();
       console.log(error);
     }
   };
-
-  const search = (e) => getUsers({ name: e?.target?.value });
 
   const listenReceive = () => {
     socket.on("receive", (msg) => {
@@ -69,9 +86,41 @@ const Home = () => {
     });
   };
 
+  const onUserTabChange = (key) => {
+    setActiveTab(key);
+    if (key === "reqs") getUsers({}, "reqs");
+    else if (key === "friends") getUsers({ type: "friends" });
+    else getUsers();
+  };
+
+  const search = (e) => {
+    if (activeTab === "reqs") getUsers({ name: e?.target?.value }, "reqs");
+    else if (activeTab === "friends")
+      getUsers({ name: e?.target?.value, type: "friends" });
+    else getUsers({ name: e?.target?.value });
+  };
+
+  const items = [
+    {
+      key: "friends",
+      label: <UserTab label="Friends" icon="people-outline" />,
+      children: <Friends users={users} />,
+    },
+    {
+      key: "reqs",
+      label: <UserTab label="Requests" icon="person-outline" />,
+      children: <Requests users={users} />,
+    },
+    {
+      key: "people",
+      label: <UserTab label="People" icon="person-add-outline" />,
+      children: <People users={users} />,
+    },
+  ];
+
   useEffect(() => {
     typeMessage?.current?.focus();
-    getUsers();
+    getUsers({ type: "friends" });
     // eslint-disable-next-line
   }, []);
 
@@ -90,52 +139,41 @@ const Home = () => {
           </div>
           <Input placeholder="Search" onChange={search} onPressEnter={search} />
           <Chat
-            name="Anonymous Users"
-            profilePic={random}
+            user={{ name: "Anonymous Users", profilePic: random }}
             annonymous={true}
             onClick={() =>
-              setSelectedUser({
-                name: "Anonymous Users",
-                profilePic: random,
-                userName: "random",
-              })
+              dispatch(
+                setSelectedUser({
+                  name: "Anonymous Users",
+                  profilePic: random,
+                  userName: "random",
+                  annonymous: true,
+                })
+              )
             }
           />
         </div>
-        <div
-          className="overflow-auto"
-          style={{ maxHeight: "calc(max(100vh - 16rem  , 24.25rem))" }}
-        >
-          {users?.map((user) => (
-            <Chat
-              key={user?.userName}
-              active={selectedUser?.userName === user?.userName}
-              name={user?.name}
-              profilePic={user?.profilePic && BaseUrl + user?.profilePic}
-              lastMsg={{ text: "Hi", time: "10:10" }}
-              onClick={() => setSelectedUser(user)}
-            />
-          ))}
-        </div>
+        <Tabs
+          className="flex w-full items-center"
+          defaultActiveKey="1"
+          onChange={onUserTabChange}
+          items={items}
+        />
       </div>
       {/* Right Part  */}
       <div className="border border-l-0 w-3/4 relative">
         {/* Chat Header  */}
-        {selectedUser?.userName ? (
+        {state.selectedUser?.userName ? (
           <>
             <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
               <Tooltip title="Info">
                 <div className="flex gap-3 cursor-pointer">
                   <img
                     className="h-14 w-14 rounded-full"
-                    src={
-                      selectedUser?.profilePic
-                        ? BaseUrl + selectedUser?.profilePic
-                        : profile
-                    }
+                    src={state.selectedUser?.profilePic || profile}
                     alt=""
                   />
-                  {selectedUser?.userName === "naresh_bazidpuria_63425" && (
+                  {state.selectedUser?.verified && (
                     <img
                       className="absolute h-5 w-5 bottom-2 left-14"
                       src={verified}
@@ -143,23 +181,29 @@ const Home = () => {
                     />
                   )}
                   <div className="flex flex-col">
-                    <span className="text-xl">{selectedUser?.name}</span>
-                    <span className="text-gray-500 text-sm">Online</span>
+                    <span className="text-xl">{state.selectedUser?.name}</span>
+                    <span className="text-gray-500 text-sm">
+                      {state.selectedUser?.annonymous
+                        ? "You are chatting with anonymous users"
+                        : "Online"}
+                    </span>
                   </div>
                 </div>
               </Tooltip>
-              <div className="flex gap-5 text-2xl text-gray-500">
-                <Tooltip title="Video Call">
-                  <span className="flex cursor-pointer">
-                    <ion-icon name="videocam-outline" />
-                  </span>
-                </Tooltip>
-                <Tooltip title="Call">
-                  <span className="flex cursor-pointer">
-                    <ion-icon name="call-outline" />
-                  </span>
-                </Tooltip>
-              </div>
+              {!state.selectedUser?.annonymous && (
+                <div className="flex gap-5 text-2xl text-gray-500">
+                  <Tooltip title="Video Call">
+                    <span className="flex cursor-pointer">
+                      <ion-icon name="videocam-outline" />
+                    </span>
+                  </Tooltip>
+                  <Tooltip title="Call">
+                    <span className="flex cursor-pointer">
+                      <ion-icon name="call-outline" />
+                    </span>
+                  </Tooltip>
+                </div>
+              )}
             </div>
             {/* Chat Body  */}
             <div

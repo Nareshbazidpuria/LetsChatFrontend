@@ -23,9 +23,11 @@ const Edit = () => {
         });
         if (profile?.status === 200) {
           message.success(res?.data?.message);
-          setProfilePic(BaseUrl + profile?.data?.data?.profilePic);
+          const user = profile?.data?.data;
+          if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+          setProfilePic(user?.profilePic);
           setLoading(false);
-          localStorage.setItem("user", JSON.stringify(profile?.data?.data));
+          localStorage.setItem("user", JSON.stringify(user));
         }
       } else {
         setLoading(false);
@@ -44,7 +46,9 @@ const Edit = () => {
       if (res?.status === 200) {
         setLoading(false);
         message.success(res?.data?.message);
-        localStorage.setItem("user", JSON.stringify(res?.data?.data));
+        const user = res?.data?.data;
+        if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+        localStorage.setItem("user", JSON.stringify(user));
       } else {
         setLoading(false);
         message.error(res?.data?.message);
@@ -58,7 +62,7 @@ const Edit = () => {
   const onChange = (e) => setPayload({ [e?.target?.name]: e?.target?.value });
 
   useEffect(() => {
-    setProfilePic(BaseUrl + JSON.parse(localStorage.user)?.profilePic);
+    setProfilePic(JSON.parse(localStorage.user)?.profilePic);
     setUser(JSON.parse(localStorage.user));
   }, []);
 

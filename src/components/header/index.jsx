@@ -3,7 +3,6 @@ import logo from "../../assets/img/logo.png";
 import profile from "../../assets/img/profile.png";
 import PopoverContent from "./PopoverContent";
 import { Link } from "react-router-dom";
-import { BaseUrl } from "../../axios";
 
 const Header = () => {
   return (
@@ -22,11 +21,7 @@ const Header = () => {
         <Tooltip title="Profile">
           <img
             className="h-10 w-10 border border-sky-600 rounded-full cursor-pointer"
-            src={
-              JSON.parse(localStorage.user)?.profilePic
-                ? BaseUrl + JSON.parse(localStorage.user)?.profilePic
-                : profile
-            }
+            src={JSON.parse(localStorage.user)?.profilePic || profile}
             alt=""
           />
         </Tooltip>

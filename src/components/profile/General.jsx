@@ -3,6 +3,7 @@ import { getProfileApi } from "../../apis";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Cover from "./Cover";
+import { BaseUrl } from "../../axios";
 
 const General = () => {
   const [user, setUser] = useState();
@@ -11,8 +12,10 @@ const General = () => {
     try {
       let res = await getProfileApi();
       if (res?.status === 200) {
-        setUser(res?.data?.data);
-        localStorage.setItem("user", JSON.stringify(res?.data?.data));
+        const user = res?.data?.data;
+        if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
       } else message.error(res?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);

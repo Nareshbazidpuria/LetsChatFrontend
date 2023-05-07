@@ -6,6 +6,7 @@ export const ENDPOINT = {
   PROFILE: "/api/profile",
   USERS: "/api/user",
   UPLOAD: "/api/generic/upload",
+  REQUEST: "/api/request",
 };
 
 export const signUpApi = (payload) => app.post(ENDPOINT.SIGNUP, payload);
@@ -21,3 +22,7 @@ export const logoutApi = () => app.post(ENDPOINT.LOGOUT);
 export const getUsersApi = (params) => app.get(ENDPOINT.USERS, { params });
 
 export const uploadImageApi = (formData) => app.post(ENDPOINT.UPLOAD, formData);
+
+export const getReqsApi = (params) => app.get(ENDPOINT.REQUEST, { params });
+
+export const sendRequestApi = (payload) => app.post(ENDPOINT.REQUEST, payload);

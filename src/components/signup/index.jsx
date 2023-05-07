@@ -68,6 +68,10 @@ const SignUp = () => {
                 message: "Please enter your Username !",
               },
               {
+                max: 20,
+                message: "Username can be 16 character long",
+              },
+              {
                 pattern: /^(?![0-9_])[a-z0-9_]{3,30}$/,
                 message:
                   "Only lower case, underscore and numbers are allowed !",
