@@ -26,3 +26,9 @@ export const uploadImageApi = (formData) => app.post(ENDPOINT.UPLOAD, formData);
 export const getReqsApi = (params) => app.get(ENDPOINT.REQUEST, { params });
 
 export const sendRequestApi = (payload) => app.post(ENDPOINT.REQUEST, payload);
+
+export const confirmRequestApi = (reqId) =>
+  app.put(`${ENDPOINT.REQUEST}/${reqId}`);
+
+export const rejectReqApi = (reqId, params) =>
+  app.delete(`${ENDPOINT.REQUEST}/${reqId}`, { params });

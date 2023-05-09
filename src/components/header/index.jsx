@@ -21,7 +21,11 @@ const Header = () => {
         <Tooltip title="Profile">
           <img
             className="h-10 w-10 border border-sky-600 rounded-full cursor-pointer"
-            src={JSON.parse(localStorage.user)?.profilePic || profile}
+            src={
+              localStorage.user
+                ? JSON.parse(localStorage.user)?.profilePic || profile
+                : profile
+            }
             alt=""
           />
         </Tooltip>

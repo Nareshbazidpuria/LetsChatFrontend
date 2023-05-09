@@ -62,8 +62,10 @@ const Edit = () => {
   const onChange = (e) => setPayload({ [e?.target?.name]: e?.target?.value });
 
   useEffect(() => {
-    setProfilePic(JSON.parse(localStorage.user)?.profilePic);
-    setUser(JSON.parse(localStorage.user));
+    if (localStorage.user) {
+      setProfilePic(JSON.parse(localStorage.user)?.profilePic);
+      setUser(JSON.parse(localStorage.user));
+    }
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,7 @@ const People = ({ users }) => {
     >
       {users?.length ? (
         users?.map((user) => (
-          <AddFriend key={user?.userName} user={user} add={true} />
+          <AddFriend key={user?.userName} userr={user} add={true} />
         ))
       ) : (
         <div className="flex justify-center items-center h-80">

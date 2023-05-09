@@ -8,7 +8,7 @@ const Requests = ({ users }) => {
       style={{ maxHeight: "calc(max(100vh - 20rem  , 20.25rem))" }}
     >
       {users?.length ? (
-        users?.map((user) => <AddFriend key={user?.userName} user={user} />)
+        users?.map((user) => <AddFriend key={user?.userName} userr={user} />)
       ) : (
         <div className="flex justify-center items-center h-80">
           <Empty description="No Requests" />
