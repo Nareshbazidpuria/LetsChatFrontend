@@ -1,17 +1,16 @@
 import { message } from "antd";
 import { confirmRequestApi, sendRequestApi, rejectReqApi } from "../../apis";
 import profile from "../../assets/img/profile.png";
-import { useState } from "react";
+import {  useState } from "react";
 
 const AddFriend = ({ userr, add }) => {
-  const [requested, setRequested] = useState([]);
   const [user, setUser] = useState(userr);
 
   const sendRequest = async (to) => {
     try {
       let res = await sendRequestApi({ to });
       if (res?.status === 201) {
-        setRequested([...requested, to?.toString()]);
+        setUser({ ...user, reqSent: res?.data?.data });
         message.success(res?.data?.message);
       } else message.error(res?.data?.message);
     } catch (error) {
@@ -37,7 +36,7 @@ const AddFriend = ({ userr, add }) => {
     try {
       let res = await rejectReqApi(requestId, params);
       if (res?.status === 200) {
-        setUser(null);
+        params?.type ? setUser({ ...user, reqSent: null }) : setUser(null);
         message.success(res?.data?.message);
       } else message.error(res?.data?.message);
     } catch (error) {
@@ -66,10 +65,16 @@ const AddFriend = ({ userr, add }) => {
             </div>
             {add && !user?.reqReceived ? (
               <>
-                {user?.reqSent || requested.includes(user?._id?.toString()) ? (
-                  <span className="border py-1 px-2 rounded flex items-center gap-1">
-                    <ion-icon name="checkmark-outline" />
-                    <span>Sent</span>
+                {user?.reqSent ? (
+                  <span
+                    className="border py-1 px-2 rounded cursor-pointer"
+                    onClick={() =>
+                      rejectRequest(user?.requestId || user?.reqSent?._id, {
+                        type: "cancel",
+                      })
+                    }
+                  >
+                    Cancel
                   </span>
                 ) : (
                   <span

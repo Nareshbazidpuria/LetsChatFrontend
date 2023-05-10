@@ -12,8 +12,8 @@ import { MESSAGE_TYPE } from "../../constant";
 import { getReqsApi, getUsersApi } from "../../apis";
 import { BaseUrl } from "../../axios";
 import logo from "../../assets/img/logo.png";
-import "../../apis/socket";
-import { socket } from "../../apis/socket";
+// import "../../apis/socket";
+import { connectToSocketApi, socket } from "../../apis/socket";
 import UserTab from "./UserTab";
 import Friends from "./Friends";
 import { useDispatch, useSelector } from "react-redux";
@@ -122,6 +122,10 @@ const Home = () => {
     typeMessage?.current?.focus();
     getUsers({ type: "friends" });
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (!socket) connectToSocketApi();
   }, []);
 
   useEffect(() => listenReceive());
