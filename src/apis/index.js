@@ -7,6 +7,7 @@ export const ENDPOINT = {
   USERS: "/api/user",
   UPLOAD: "/api/generic/upload",
   REQUEST: "/api/request",
+  MESSAGE: "/api/message",
 };
 
 export const signUpApi = (payload) => app.post(ENDPOINT.SIGNUP, payload);
@@ -32,3 +33,8 @@ export const confirmRequestApi = (reqId) =>
 
 export const rejectReqApi = (reqId, params) =>
   app.delete(`${ENDPOINT.REQUEST}/${reqId}`, { params });
+
+export const sendMsgApi = (roomId, payload) =>
+  app.post(`${ENDPOINT.MESSAGE}/${roomId}`, payload);
+
+export const getMsgsApi = (roomId) => app.get(`${ENDPOINT.MESSAGE}/${roomId}`);

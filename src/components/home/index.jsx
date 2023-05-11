@@ -7,12 +7,10 @@ import "./style.css";
 import { useEffect, useRef, useState } from "react";
 import Chat from "../chat";
 import Message from "../message";
-import moment from "moment/moment";
 import { MESSAGE_TYPE } from "../../constant";
-import { getReqsApi, getUsersApi } from "../../apis";
+import { getMsgsApi, getReqsApi, getUsersApi, sendMsgApi } from "../../apis";
 import { BaseUrl } from "../../axios";
 import logo from "../../assets/img/logo.png";
-// import "../../apis/socket";
 import { connectToSocketApi, socket } from "../../apis/socket";
 import UserTab from "./UserTab";
 import Friends from "./Friends";
@@ -33,14 +31,26 @@ const Home = () => {
 
   const onChange = (e) => setMsg(e?.target?.value);
 
-  const send = (text) => {
-    text = text?.trim();
-    if (text) {
-      socket.emit("msg", text);
+  const sendMessage = async (roomId, message) => {
+    try {
+      if (roomId && message) await sendMsgApi(roomId, { message });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const send = (message) => {
+    message = message?.trim();
+    if (message) {
+      socket.emit("message", {
+        message,
+        roomId: state?.selectedUser?.room?._id,
+      });
       setMessages([
         ...messages,
-        { msg: text, time: new Date(), type: MESSAGE_TYPE.OUTGOING },
+        { message, createdAt: new Date(), type: MESSAGE_TYPE.OUTGOING },
       ]);
+      sendMessage(state?.selectedUser?.room?._id, msg);
       setMsg("");
       typeMessage?.current?.focus();
       chatBody.current.scrollTop = chatBody.current?.scrollHeight;
@@ -72,10 +82,10 @@ const Home = () => {
   };
 
   const listenReceive = () => {
-    socket.on("receive", (msg) => {
+    socket.on("receive", ({ message, createdAt }) => {
       setMessages([
         ...messages,
-        { msg, time: new Date(), type: MESSAGE_TYPE.INCOMMING },
+        { message, createdAt: new Date(), type: MESSAGE_TYPE.INCOMMING },
       ]);
       document.querySelector("#chat-body").scrollTop =
         chatBody.current?.scrollHeight;
@@ -98,6 +108,27 @@ const Home = () => {
     else if (activeTab === "friends")
       getUsers({ name: e?.target?.value, type: "friends" });
     else getUsers({ name: e?.target?.value });
+  };
+
+  const joinChat = async (user) => {
+    try {
+      setMessages([]);
+      if (user?.room?._id) {
+        let res = await getMsgsApi(user.room._id);
+        if (
+          res?.status === 200 &&
+          user.room._id !== "644d362526d8c8d7b063e6ca"
+        ) {
+          setMessages(res?.data?.data?.data);
+          setTimeout(() => {
+            document.querySelector("#chat-body").scrollTop =
+              chatBody.current?.scrollHeight;
+          }, 200);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const items = [
@@ -128,6 +159,10 @@ const Home = () => {
     if (!socket) connectToSocketApi();
   }, []);
 
+  useEffect(() => {
+    if (state.selectedUser) joinChat(state.selectedUser);
+  }, [state.selectedUser]);
+
   useEffect(() => listenReceive());
 
   return (
@@ -152,6 +187,7 @@ const Home = () => {
                   profilePic: random,
                   userName: "random",
                   annonymous: true,
+                  room: { _id: "644d362526d8c8d7b063e6ca" },
                 })
               )
             }
@@ -218,10 +254,8 @@ const Home = () => {
               <img src={wallpaper} alt="" />
               {messages?.map((message) => (
                 <Message
-                  key={message?.msg + message?.time}
-                  type={message?.type}
-                  msg={message?.msg}
-                  time={moment(message?.time)?.format("hh:mm A")}
+                  key={message?.message + Math.random(Date.now())}
+                  message={message}
                 />
               ))}
             </div>
