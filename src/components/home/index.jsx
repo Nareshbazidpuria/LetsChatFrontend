@@ -1,4 +1,4 @@
-import { Input, Tabs, Tooltip } from "antd";
+import { Input, Popover, Spin, Tabs, Tooltip } from "antd";
 import profile from "../../assets/img/profile.png";
 import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from "../../redux/actions";
 import People from "./People";
 import Requests from "./Requests";
+import TextArea from "antd/es/input/TextArea";
+import EmojiPicker from "emoji-picker-react";
 
 const Home = () => {
   const state = useSelector((state) => state);
@@ -28,8 +30,13 @@ const Home = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [activeTab, setActiveTab] = useState("friends");
+  const [loadingChat, setLoadingChat] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   const onChange = (e) => setMsg(e?.target?.value);
+
+  const selectEmoji = (emoji) => setMsg(msg + emoji.emoji);
 
   const sendMessage = async (roomId, message) => {
     try {
@@ -39,7 +46,8 @@ const Home = () => {
     }
   };
 
-  const send = (message) => {
+  const send = (message, e) => {
+    e && e.preventDefault();
     message = message?.trim();
     if (message) {
       socket.emit("message", {
@@ -85,7 +93,7 @@ const Home = () => {
     socket.on("receive", ({ message, createdAt }) => {
       setMessages([
         ...messages,
-        { message, createdAt: new Date(), type: MESSAGE_TYPE.INCOMMING },
+        { message, createdAt, type: MESSAGE_TYPE.INCOMMING },
       ]);
       document.querySelector("#chat-body").scrollTop =
         chatBody.current?.scrollHeight;
@@ -112,13 +120,18 @@ const Home = () => {
 
   const joinChat = async (user) => {
     try {
+      setPage(1);
+      chatBody.current.focus();
+      setLoadingChat(true);
       setMessages([]);
       if (user?.room?._id) {
-        let res = await getMsgsApi(user.room._id);
+        let res = await getMsgsApi(user.room._id, 1);
         if (
           res?.status === 200 &&
           user.room._id !== "644d362526d8c8d7b063e6ca"
         ) {
+          setTotalRecords(res?.data?.data?.totalRecords);
+          setLoadingChat(false);
           setMessages(res?.data?.data?.data);
           setTimeout(() => {
             document.querySelector("#chat-body").scrollTop =
@@ -126,9 +139,39 @@ const Home = () => {
           }, 200);
         }
       }
+      setLoadingChat(false);
     } catch (error) {
+      setLoadingChat(false);
       console.log(error);
     }
+  };
+
+  const handleNextPageCall = async () => {
+    try {
+      if (messages?.length < totalRecords) {
+        setLoadingChat(true);
+        let res = await getMsgsApi(state.selectedUser.room._id, page + 1);
+        if (
+          res?.status === 200 &&
+          state.selectedUser.room._id !== "644d362526d8c8d7b063e6ca"
+        ) {
+          setTimeout(
+            () => (document.querySelector("#chat-body").scrollTop = 20),
+            300
+          );
+          setPage(page + 1);
+          setMessages([...res.data.data.data, ...messages]);
+        }
+        setLoadingChat(false);
+      }
+    } catch (error) {
+      setLoadingChat(false);
+    }
+  };
+
+  const onScroll = async () => {
+    if (chatBody.current && chatBody.current.scrollTop === 0)
+      messages?.length && handleNextPageCall();
   };
 
   const items = [
@@ -250,8 +293,14 @@ const Home = () => {
               id="chat-body"
               ref={chatBody}
               className="relative px-5 py-2 overflow-auto"
+              onScroll={onScroll}
             >
               <img src={wallpaper} alt="" />
+              {loadingChat && (
+                <div className="flex justify-center items-center h-20">
+                  <Spin size="large" />
+                </div>
+              )}
               {messages?.map((message) => (
                 <Message
                   key={message?.message + Math.random(Date.now())}
@@ -261,20 +310,34 @@ const Home = () => {
             </div>
             {/* Chat Footer  */}
             <div className="flex justify-around items-center text-2xl text-gray-500 py-5 border-t bg-white sticky bottom-0">
-              <div className="cursor-pointer">
-                <ion-icon name="happy-outline" />
-              </div>
+              <div className="cursor-pointer"></div>
+              <Popover
+                style={{ padding: "0 !important" }}
+                placement="topLeft"
+                content={
+                  <EmojiPicker
+                    emojiStyle="facebook"
+                    onEmojiClick={selectEmoji}
+                  />
+                }
+                trigger="click"
+              >
+                <div className="cursor-pointer">
+                  <ion-icon name="happy-outline" />
+                </div>
+              </Popover>
               <div className="rotate-45 cursor-pointer">
                 <ion-icon name="attach-outline" />
               </div>
-              <Input
+              <TextArea
                 className="w-5/6"
+                rows={1}
                 ref={typeMessage}
                 id="type-message"
                 placeholder="Type a message"
                 value={msg}
                 onChange={onChange}
-                onPressEnter={() => send(msg)}
+                onPressEnter={(e) => send(msg, e)}
               />
               {msg ? (
                 <div

@@ -11,5 +11,10 @@
 }
 
 .ant-popover-inner {
-  padding: .5rem 0 !important;
+  padding: 0 !important;
+}
+
+.epr-search, .epr-emoji-category-label {
+  font-size: 1rem !important;
+  font-weight: normal !important;
 }
