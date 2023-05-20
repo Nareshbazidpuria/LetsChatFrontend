@@ -118,15 +118,17 @@ const Edit = () => {
           </div>
         ) : (
           <>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name">Username</label>
-              <input
-                className="border-b outline-none py-1 px-2 cursor-no-drop"
-                type="text"
-                disabled
-                value={user?.userName}
-              />
-            </div>
+            <Tooltip placement="topLeft" title="Username can't be changed">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name">Username</label>
+                <input
+                  className="border-b outline-none py-1 px-2 cursor-no-drop"
+                  type="text"
+                  disabled
+                  value={user?.userName}
+                />
+              </div>
+            </Tooltip>
             <div className="flex flex-col gap-2">
               <label htmlFor="name">Name</label>
               <input

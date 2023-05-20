@@ -121,7 +121,7 @@ const Home = () => {
   const joinChat = async (user) => {
     try {
       setPage(1);
-      chatBody.current.focus();
+      typeMessage.current.focus();
       setLoadingChat(true);
       setMessages([]);
       if (user?.room?._id) {

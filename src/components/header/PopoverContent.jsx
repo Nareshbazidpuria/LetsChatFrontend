@@ -17,7 +17,7 @@ const PopoverContent = () => {
     }
   };
   return (
-    <div className="w-24">
+    <div className="w-32 py-2">
       <Link to="/profile">
         <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1">
           <span className="flex text-lg">

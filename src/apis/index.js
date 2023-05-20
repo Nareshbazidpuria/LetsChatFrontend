@@ -37,5 +37,5 @@ export const rejectReqApi = (reqId, params) =>
 export const sendMsgApi = (roomId, payload) =>
   app.post(`${ENDPOINT.MESSAGE}/${roomId}`, payload);
 
-export const getMsgsApi = (roomId, page = 1, limit = 10) =>
+export const getMsgsApi = (roomId, page = 1, limit = 20) =>
   app.get(`${ENDPOINT.MESSAGE}/${roomId}`, { params: { page, limit } });
