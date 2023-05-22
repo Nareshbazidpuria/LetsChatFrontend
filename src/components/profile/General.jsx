@@ -37,7 +37,7 @@ const General = () => {
         <div className="text-gray-400">{user?.userName}</div>
         <div className="text-gray-400 text-sm">{user?.email}</div>
         <div className="text-sm flex flex-col items-center w-32 bg-slate-100 my-3 p-2 rounded-lg">
-          <span>{user?.friends?.length || 0}</span>
+          <span>{user?.friends || 0}</span>
           <span>Friends</span>
         </div>
         <Link to="/profile/edit">

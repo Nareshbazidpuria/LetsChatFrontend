@@ -20,6 +20,7 @@ import People from "./People";
 import Requests from "./Requests";
 import TextArea from "antd/es/input/TextArea";
 import EmojiPicker from "emoji-picker-react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const state = useSelector((state) => state);
@@ -250,28 +251,32 @@ const Home = () => {
           <>
             <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
               <Tooltip title="Info">
-                <div className="flex gap-3 cursor-pointer">
-                  <img
-                    className="h-14 w-14 rounded-full"
-                    src={state.selectedUser?.profilePic || profile}
-                    alt=""
-                  />
-                  {state.selectedUser?.verified && (
+                <Link to={`/user/${state?.selectedUser?._id}`}>
+                  <div className="flex gap-3 cursor-pointer">
                     <img
-                      className="absolute h-5 w-5 bottom-2 left-14"
-                      src={verified}
+                      className="h-14 w-14 rounded-full"
+                      src={state.selectedUser?.profilePic || profile}
                       alt=""
                     />
-                  )}
-                  <div className="flex flex-col">
-                    <span className="text-xl">{state.selectedUser?.name}</span>
-                    <span className="text-gray-500 text-sm">
-                      {state.selectedUser?.annonymous
-                        ? "You are chatting with anonymous users"
-                        : "Online"}
-                    </span>
+                    {state.selectedUser?.verified && (
+                      <img
+                        className="absolute h-5 w-5 bottom-2 left-14"
+                        src={verified}
+                        alt=""
+                      />
+                    )}
+                    <div className="flex flex-col">
+                      <span className="text-xl">
+                        {state.selectedUser?.name}
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        {state.selectedUser?.annonymous
+                          ? "You are chatting with anonymous users"
+                          : "Online"}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </Tooltip>
               {!state.selectedUser?.annonymous && (
                 <div className="flex gap-5 text-2xl text-gray-500">

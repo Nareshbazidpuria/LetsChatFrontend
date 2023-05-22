@@ -1,4 +1,6 @@
+import moment from "moment";
 import profile from "../../assets/img/profile.png";
+import { MESSAGE_TYPE } from "../../constant";
 
 const Chat = ({ user, onClick, annonymous, active }) => {
   return (
@@ -23,7 +25,8 @@ const Chat = ({ user, onClick, annonymous, active }) => {
           <span
             className={`${active ? "text-white" : "text-gray-400"} text-xs`}
           >
-            {user?.lastMsg?.time}
+            {user?.room?.lastMessage?.createdAt &&
+              moment(user?.room?.lastMessage?.createdAt).format("hh:mm A")}
           </span>
         </div>
         <div
@@ -31,12 +34,14 @@ const Chat = ({ user, onClick, annonymous, active }) => {
             active ? "text-white" : "text-gray-400"
           } text-xs`}
         >
-          {user?.lastMsg?.text ? (
+          {user?.room?.lastMessage?.message ? (
             <>
-              <span className="flex text-base">
-                <ion-icon name="checkmark-done-outline" />
-              </span>
-              <span>{user?.lastMsg?.text}</span>
+              {user?.room?.lastMessage?.type === MESSAGE_TYPE.OUTGOING && (
+                <span className="flex text-base">
+                  <ion-icon name="checkmark-done-outline" />
+                </span>
+              )}
+              <span>{user?.room?.lastMessage?.message}</span>
             </>
           ) : (
             <div className="h-5">

@@ -1,7 +1,8 @@
-import { message } from "antd";
+import { Tooltip, message } from "antd";
 import { confirmRequestApi, sendRequestApi, rejectReqApi } from "../../apis";
 import profile from "../../assets/img/profile.png";
-import {  useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const AddFriend = ({ userr, add }) => {
   const [user, setUser] = useState(userr);
@@ -57,12 +58,16 @@ const AddFriend = ({ userr, add }) => {
             alt=""
           />
           <div className="w-4/5 flex justify-between items-center">
-            <div className="flex flex-col">
-              <span>{user?.name}</span>
-              <span className="flex gap-1 text-gray-400 text-xs">
-                {user.userName}
-              </span>
-            </div>
+            <Link to={`/user/${user?._id}`}>
+              <Tooltip title="View">
+                <div className="flex flex-col cursor-pointer">
+                  <span>{user?.name}</span>
+                  <span className="flex gap-1 text-gray-400 text-xs">
+                    {user.userName}
+                  </span>
+                </div>
+              </Tooltip>
+            </Link>
             {add && !user?.reqReceived ? (
               <>
                 {user?.reqSent ? (
