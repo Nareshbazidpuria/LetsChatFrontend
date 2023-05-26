@@ -307,10 +307,7 @@ const Home = () => {
                 </div>
               )}
               {messages?.map((message) => (
-                <Message
-                  key={message?.message + Math.random(Date.now())}
-                  message={message}
-                />
+                <Message key={JSON.stringify(message)} message={message} />
               ))}
             </div>
             {/* Chat Footer  */}

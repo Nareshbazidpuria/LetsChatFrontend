@@ -22,12 +22,18 @@ const Chat = ({ user, onClick, annonymous, active }) => {
       <div className="w-4/5">
         <div className="flex justify-between items-center">
           <span>{user?.name}</span>
-          <span
-            className={`${active ? "text-white" : "text-gray-400"} text-xs`}
-          >
-            {user?.room?.lastMessage?.createdAt &&
-              moment(user?.room?.lastMessage?.createdAt).format("hh:mm A")}
-          </span>
+          {user?.room?.lastMessage?.createdAt && (
+            <span
+              className={`${active ? "text-white" : "text-gray-400"} text-xs`}
+            >
+              {new Date(user?.room?.lastMessage?.createdAt) <
+              new Date(moment(new Date()).startOf("day"))
+                ? moment(user?.room?.lastMessage?.createdAt).format(
+                    "DD/MM/YYYY"
+                  )
+                : moment(user?.room?.lastMessage?.createdAt).format("hh:mm A")}
+            </span>
+          )}
         </div>
         <div
           className={`flex gap-1 ${
