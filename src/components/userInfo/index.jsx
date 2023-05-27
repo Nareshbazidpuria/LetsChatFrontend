@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import Cover from "../profile/Cover";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUserInfoApi } from "../../apis";
+import {
+  confirmRequestApi,
+  getUserInfoApi,
+  rejectReqApi,
+  sendRequestApi,
+  unfriendApi,
+} from "../../apis";
 import { BaseUrl } from "../../axios";
 import { useDispatch } from "react-redux";
 import { setSelectedUser } from "../../redux/actions";
+import { Popover, message } from "antd";
 
 const UserInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const [user, setUser] = useState();
+  const [popup, setPopup] = useState(false);
 
   const getUser = async (id) => {
     try {
@@ -24,6 +32,60 @@ const UserInfo = () => {
         });
     } catch (error) {}
   };
+
+  const unfriend = async (id) => {
+    try {
+      const res = await unfriendApi(id);
+      if (res?.data?.status === 200) message.success(res?.data?.message);
+      getUser(id);
+      dispatch(setSelectedUser(null));
+    } catch (error) {
+      message.success(error?.data?.message);
+      console.log(error);
+    }
+  };
+
+  const sendRequest = async (to) => {
+    try {
+      let res = await sendRequestApi({ to });
+      if (res?.status === 201) {
+        setUser({ ...user, reqSent: res?.data?.data });
+        message.success(res?.data?.message);
+      } else message.error(res?.data?.message);
+    } catch (error) {
+      message.error(error?.data?.message);
+      console.log(error);
+    }
+  };
+
+  const confirmRequest = async (requestId) => {
+    try {
+      let res = await confirmRequestApi(requestId);
+      if (res?.status === 200) {
+        getUser(id);
+        message.success(res?.data?.message);
+      } else message.error(res?.data?.message);
+    } catch (error) {
+      message.error(error?.data?.message);
+      console.log(error);
+    }
+  };
+
+  const rejectRequest = async (requestId, params) => {
+    try {
+      let res = await rejectReqApi(requestId, params);
+      if (res?.status === 200) {
+        params?.type
+          ? setUser({ ...user, reqSent: null })
+          : setUser({ ...user, reqReceived: null });
+        message.success(res?.data?.message);
+      } else message.error(res?.data?.message);
+    } catch (error) {
+      message.error(error?.data?.message);
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getUser(id);
   }, [id]);
@@ -47,16 +109,33 @@ const UserInfo = () => {
           </div>
           {user?.reqReceived && (
             <div className="flex items-center gap-3 text-white text-base h-fit">
-              <span className="cursor-pointer bg-sky-400 py-1 px-2 rounded flex ">
+              <span
+                className="cursor-pointer bg-sky-400 py-1 px-2 rounded flex"
+                onClick={() =>
+                  confirmRequest(user?.requestId || user?.reqReceived?._id)
+                }
+              >
                 Confirm Request
               </span>
-              <span className="cursor-pointer text-gray-500 border py-1 px-2 rounded flex">
+              <span
+                className="cursor-pointer text-gray-500 border py-1 px-2 rounded flex"
+                onClick={() =>
+                  rejectRequest(user?.requestId || user?.reqReceived?._id, {})
+                }
+              >
                 Reject
               </span>
             </div>
           )}
           {user?.reqSent && (
-            <span className="border py-1 px-2 rounded cursor-pointer h-fit">
+            <span
+              className="border py-1 px-2 rounded cursor-pointer h-fit"
+              onClick={() =>
+                rejectRequest(user?.reqSent?._id, {
+                  type: "cancel",
+                })
+              }
+            >
               Cancel Request
             </span>
           )}
@@ -77,16 +156,50 @@ const UserInfo = () => {
               <span className="flex cursor-pointer text-2xl">
                 <ion-icon name="call-outline" />
               </span>
-              <button className="bg-sky-500 text-white px-5 py-2 rounded w-32 h-fit text-center outline-none cursor-pointer">
-                Unfriend
-              </button>
+              <Popover
+                placement="topRight"
+                open={popup}
+                content={
+                  <div className="px-5 py-3">
+                    <div>Are you sure to unfriend ?</div>
+                    <div className="flex gap-2 mt-3">
+                      <span
+                        className="bg-sky-400 rounded px-3 text-white cursor-pointer"
+                        onClick={() => unfriend(user?._id)}
+                      >
+                        Yes
+                      </span>
+                      <span
+                        className="border rounded px-3 cursor-pointer"
+                        onClick={() => setPopup(false)}
+                      >
+                        No
+                      </span>
+                    </div>
+                  </div>
+                }
+                trigger="click"
+              >
+                <button
+                  className="bg-sky-500 text-white px-5 py-2 rounded w-32 h-fit text-center outline-none cursor-pointer"
+                  onClick={() => setPopup(true)}
+                >
+                  Unfriend
+                </button>
+              </Popover>
             </div>
           )}
           {!(user?.room?._id || user?.reqReceived || user?.reqSent) && (
-            <span className="cursor-pointer border py-1 px-2 rounded flex items-center gap-1 bg-sky-400 text-white h-fit">
+            <button
+              disabled={!user}
+              className={`${
+                user ? "cursor-pointer" : "cursor-no-drop"
+              } border py-1 px-2 rounded flex items-center gap-1 bg-sky-400 text-white h-fit`}
+              onClick={() => sendRequest(user?._id)}
+            >
               <ion-icon name="person-add-outline" />
               <span>Add Friend</span>
-            </span>
+            </button>
           )}
         </div>
       </div>

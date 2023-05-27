@@ -1,4 +1,4 @@
-import { Popover, Tooltip } from "antd";
+import { Popover } from "antd";
 import logo from "../../assets/img/logo.png";
 import profile from "../../assets/img/profile.png";
 import PopoverContent from "./PopoverContent";
@@ -18,17 +18,15 @@ const Header = () => {
         content={<PopoverContent />}
         trigger="click"
       >
-        <Tooltip title="Profile">
-          <img
-            className="h-10 w-10 border border-sky-600 rounded-full cursor-pointer"
-            src={
-              localStorage.user
-                ? JSON.parse(localStorage.user)?.profilePic || profile
-                : profile
-            }
-            alt=""
-          />
-        </Tooltip>
+        <img
+          className="h-10 w-10 border border-sky-600 rounded-full cursor-pointer"
+          src={
+            localStorage.user
+              ? JSON.parse(localStorage.user)?.profilePic || profile
+              : profile
+          }
+          alt=""
+        />
       </Popover>
     </div>
   );

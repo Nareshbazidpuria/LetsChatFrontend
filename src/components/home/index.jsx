@@ -1,4 +1,4 @@
-import { Input, Popover, Spin, Tabs, Tooltip } from "antd";
+import { Input, Spin, Tabs, Tooltip, notification } from "antd";
 import profile from "../../assets/img/profile.png";
 import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
@@ -34,6 +34,7 @@ const Home = () => {
   const [loadingChat, setLoadingChat] = useState(false);
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [emojiPannel, setEmojiPannel] = useState(false);
 
   const onChange = (e) => setMsg(e?.target?.value);
 
@@ -48,7 +49,7 @@ const Home = () => {
   };
 
   const send = (message, e) => {
-    e && e.preventDefault();
+    if (e) e.preventDefault();
     message = message?.trim();
     if (message) {
       socket.emit("message", {
@@ -105,6 +106,30 @@ const Home = () => {
     });
   };
 
+  const msgNotification = () => {
+    socket.on("msgNotification", ({ message, by }) => {
+      if (by._id.toString() !== state.selectedUser?._id?.toString()) {
+        notification.info({
+          message: <span className="ml-3 font-bold">{by.name}</span>,
+          description: (
+            <div className="ml-3 flex gap-2 items-center text-xl">
+              <ion-icon name="chatbubble-ellipses-outline" />
+              <span className="text-base">{message?.message}</span>
+            </div>
+          ),
+          placement: "bottomRight",
+          icon: (
+            <img
+              src={by?.profilePic ? BaseUrl + by?.profilePic : profile}
+              alt=""
+              className="w-10 h-10 mt-1 rounded-full"
+            />
+          ),
+        });
+      }
+    });
+  };
+
   const onUserTabChange = (key) => {
     setActiveTab(key);
     if (key === "reqs") getUsers({}, "reqs");
@@ -129,7 +154,7 @@ const Home = () => {
         let res = await getMsgsApi(user.room._id, 1);
         if (
           res?.status === 200 &&
-          user.room._id !== "644d362526d8c8d7b063e6ca"
+          user.room._id !== "644d362526d8c8d7b063e6cb"
         ) {
           setTotalRecords(res?.data?.data?.totalRecords);
           setLoadingChat(false);
@@ -154,7 +179,7 @@ const Home = () => {
         let res = await getMsgsApi(state.selectedUser.room._id, page + 1);
         if (
           res?.status === 200 &&
-          state.selectedUser.room._id !== "644d362526d8c8d7b063e6ca"
+          state.selectedUser.room._id !== "644d362526d8c8d7b063e6cb"
         ) {
           setTimeout(
             () => (document.querySelector("#chat-body").scrollTop = 20),
@@ -209,6 +234,11 @@ const Home = () => {
 
   useEffect(() => listenReceive());
 
+  useEffect(() => {
+    return () => msgNotification();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div className="flex" style={{ height: "calc(max(100vh - 4rem , 36rem))" }}>
       {/* Left Part  */}
@@ -231,7 +261,7 @@ const Home = () => {
                   profilePic: random,
                   userName: "random",
                   annonymous: true,
-                  room: { _id: "644d362526d8c8d7b063e6ca" },
+                  room: { _id: "644d362526d8c8d7b063e6cb" },
                 })
               )
             }
@@ -313,21 +343,22 @@ const Home = () => {
             {/* Chat Footer  */}
             <div className="flex justify-around items-center text-2xl text-gray-500 py-5 border-t bg-white sticky bottom-0">
               <div className="cursor-pointer"></div>
-              <Popover
-                style={{ padding: "0 !important" }}
-                placement="topLeft"
-                content={
+              {emojiPannel && (
+                <div className="absolute bottom-20 z-20 left-2">
                   <EmojiPicker
                     emojiStyle="facebook"
                     onEmojiClick={selectEmoji}
                   />
-                }
-                trigger="click"
-              >
-                <div className="cursor-pointer">
-                  <ion-icon name="happy-outline" />
                 </div>
-              </Popover>
+              )}
+              <div
+                className="cursor-pointer"
+                onClick={() =>
+                  emojiPannel ? setEmojiPannel(false) : setEmojiPannel(true)
+                }
+              >
+                <ion-icon name={`${emojiPannel ? "close" : "happy"}-outline`} />
+              </div>
               <div className="rotate-45 cursor-pointer">
                 <ion-icon name="attach-outline" />
               </div>

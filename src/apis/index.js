@@ -24,6 +24,8 @@ export const getUsersApi = (params) => app.get(ENDPOINT.USERS, { params });
 
 export const getUserInfoApi = (id) => app.get(`${ENDPOINT.USERS}/${id}`);
 
+export const unfriendApi = (id) => app.put(`${ENDPOINT.USERS}/${id}`);
+
 export const uploadImageApi = (formData) => app.post(ENDPOINT.UPLOAD, formData);
 
 export const getReqsApi = (params) => app.get(ENDPOINT.REQUEST, { params });
