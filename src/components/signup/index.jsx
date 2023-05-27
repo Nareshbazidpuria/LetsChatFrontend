@@ -61,6 +61,20 @@ const SignUp = () => {
             />
           </Form.Item>
           <Form.Item
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please enter email !",
+              },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
+          </Form.Item>
+          <Form.Item
             name="userName"
             rules={[
               {

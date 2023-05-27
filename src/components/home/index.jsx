@@ -27,13 +27,17 @@ const Home = () => {
   const dispatch = useDispatch();
   const typeMessage = useRef();
   const chatBody = useRef();
+  const people = useRef();
   const [msg, setMsg] = useState("");
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [activeTab, setActiveTab] = useState("friends");
   const [loadingChat, setLoadingChat] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [pageP, setPageP] = useState(1);
+  const [totalRecordsP, setTotalRecordsP] = useState(0);
   const [emojiPannel, setEmojiPannel] = useState(false);
 
   const onChange = (e) => setMsg(e?.target?.value);
@@ -72,6 +76,8 @@ const Home = () => {
 
   const getUsers = async (params, type) => {
     try {
+      setPageP(1);
+      setLoading(true);
       let res;
       if (type === "reqs") {
         res = await getReqsApi(params);
@@ -79,6 +85,8 @@ const Home = () => {
         res = await getUsersApi(params);
       }
       if (res?.status === 200) {
+        setTotalRecordsP(res?.data?.data?.totalRecords);
+        setLoading(false);
         const users = res?.data?.data?.data?.map((user) => {
           if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
           return user;
@@ -86,6 +94,7 @@ const Home = () => {
         setUsers(users);
       }
     } catch (error) {
+      setLoading(false);
       setUsers();
       console.log(error);
     }
@@ -195,9 +204,38 @@ const Home = () => {
     }
   };
 
+  const peoplePagination = async () => {
+    try {
+      if (users?.length < totalRecordsP) {
+        setLoading(true);
+        let res = await getUsersApi({ page: pageP + 1 });
+        if (res?.status === 200) {
+          setPageP(page + 1);
+          const userss = res?.data?.data?.data?.map((user) => {
+            if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
+            return user;
+          });
+          setUsers([...users, ...userss]);
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
   const onScroll = async () => {
     if (chatBody.current && chatBody.current.scrollTop === 0)
       messages?.length && handleNextPageCall();
+  };
+
+  const onScrollPeople = async () => {
+    if (people.current) {
+      const { scrollTop, scrollHeight, clientHeight } = people.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        peoplePagination();
+      }
+    }
   };
 
   const items = [
@@ -214,7 +252,14 @@ const Home = () => {
     {
       key: "people",
       label: <UserTab label="People" icon="person-add-outline" />,
-      children: <People users={users} />,
+      children: (
+        <People
+          users={users}
+          onScroll={onScrollPeople}
+          reff={people}
+          loading={loading}
+        />
+      ),
     },
   ];
 

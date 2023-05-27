@@ -20,7 +20,8 @@ export const updateProfileApi = (payload) => app.put(ENDPOINT.PROFILE, payload);
 
 export const logoutApi = () => app.post(ENDPOINT.LOGOUT);
 
-export const getUsersApi = (params) => app.get(ENDPOINT.USERS, { params });
+export const getUsersApi = (params) =>
+  app.get(ENDPOINT.USERS, { params: { ...params, limit: 20 } });
 
 export const getUserInfoApi = (id) => app.get(`${ENDPOINT.USERS}/${id}`);
 
