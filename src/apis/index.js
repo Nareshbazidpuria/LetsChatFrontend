@@ -4,6 +4,7 @@ export const ENDPOINT = {
   LOGIN: "/pub/login",
   LOGOUT: "/api/auth/logout",
   PROFILE: "/api/profile",
+  PREFERENCES: "/api/user/preferences",
   USERS: "/api/user",
   UPLOAD: "/api/generic/upload",
   REQUEST: "/api/request",
@@ -15,6 +16,9 @@ export const signUpApi = (payload) => app.post(ENDPOINT.SIGNUP, payload);
 export const loginApi = (payload) => app.post(ENDPOINT.LOGIN, payload);
 
 export const getProfileApi = () => app.get(ENDPOINT.PROFILE);
+
+export const setPreferencesApi = (payload) =>
+  app.put(ENDPOINT.PREFERENCES, { preferences: payload });
 
 export const updateProfileApi = (payload) => app.put(ENDPOINT.PROFILE, payload);
 

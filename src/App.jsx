@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route key="call" path="/call" element={<Call />} />
+        <Route key="call" path="/call/:userId" element={<Call />} />
         <Route key="layout" path="/*" element={<Layout />} />
       </Routes>
     </>

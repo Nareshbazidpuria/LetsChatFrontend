@@ -1,12 +1,51 @@
-import { Select, Switch } from "antd";
-import { useState } from "react";
+import { Select, Switch, message } from "antd";
+import { useEffect, useState } from "react";
+import { getProfileApi, setPreferencesApi } from "../../apis";
+import { BaseUrl } from "../../axios";
+import { useDispatch } from "react-redux";
+import { setDarkMode, setUser } from "../../redux/actions";
 
 const Preference = () => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [payload, setPayload] = useState();
 
-  const onChange = (checked) => {
-    console.log(checked);
+  const setPreferences = async () => {
+    try {
+      setLoading(true);
+      let res = await setPreferencesApi(payload);
+      if (res?.status === 200) message.success(res?.data?.message);
+      else message.error(res?.data?.message);
+      setLoading(false);
+      getProfile();
+    } catch (error) {
+      message.error(error?.data?.message);
+      setLoading(false);
+    }
   };
+
+  const getProfile = async () => {
+    try {
+      let res = await getProfileApi();
+      if (res?.status === 200) {
+        const user = res?.data?.data;
+        if (user?.profilePic) {
+          user.profilePic = BaseUrl + user.profilePic;
+          localStorage.setItem("user", JSON.stringify(user));
+          setPayload(user.preferences);
+          dispatch(setUser(user));
+          dispatch(setDarkMode(user?.preferences?.darkMode));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div
@@ -17,11 +56,10 @@ const Preference = () => {
       <div className="flex justify-between">
         <span>Dark Mode</span>
         <Switch
-          name="darkMode"
           className="bg-sky-200"
           loading={false}
-          defaultChecked={false}
-          onChange={onChange}
+          checked={payload?.darkMode}
+          onChange={(e) => setPayload({ ...payload, darkMode: e })}
         />
       </div>
       <div className="flex justify-between">
@@ -29,18 +67,18 @@ const Preference = () => {
         <Switch
           className="bg-sky-200"
           loading={false}
-          defaultChecked={true}
-          onChange={onChange}
+          checked={payload?.showEmail}
+          onChange={(e) => setPayload({ ...payload, showEmail: e })}
         />
       </div>
       <div className="flex justify-between">
         <span>Profile Photo</span>
         <Select
-          defaultValue="all"
+          value={payload?.showProfilePic}
           style={{
             width: 200,
           }}
-          onChange={onChange}
+          onChange={(e) => setPayload({ ...payload, showProfilePic: e })}
           options={[
             {
               value: "all",
@@ -75,11 +113,11 @@ const Preference = () => {
       <div className="flex justify-between">
         <span>Emojis</span>
         <Select
-          defaultValue="facebook"
+          value={payload?.emoji}
           style={{
             width: 200,
           }}
-          onChange={onChange}
+          onChange={(e) => setPayload({ ...payload, emoji: e })}
           options={[
             { label: "Facebook", value: "facebook" },
             { label: "Native", value: "native" },
@@ -95,6 +133,7 @@ const Preference = () => {
         }`}
         disabled={loading}
         htmltype="submit"
+        onClick={setPreferences}
       >
         Save Changes
       </button>

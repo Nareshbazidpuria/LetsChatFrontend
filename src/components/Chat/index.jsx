@@ -8,7 +8,7 @@ const Chat = ({ user, onClick, annonymous, active }) => {
       className={`flex items-center gap-3 cursor-pointer rounded-lg ${
         annonymous
           ? "bg-gray-900 text-white text-xl px-3 py-1 hover:bg-gray-950"
-          : `px-5 py-2 ${active || "hover:bg-slate-200 my-1"}`
+          : `px-5 py-2 ${active || "hover:bg-slate-200 my-1 hover:text-black"}`
       } ${active && "bg-sky-400 text-white"}`}
       onClick={onClick}
     >

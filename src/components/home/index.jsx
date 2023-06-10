@@ -15,7 +15,7 @@ import { connectToSocketApi, socket } from "../../apis/socket";
 import UserTab from "./UserTab";
 import Friends from "./Friends";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedUser } from "../../redux/actions";
+import { setSelectedUser, setUser } from "../../redux/actions";
 import People from "./People";
 import Requests from "./Requests";
 import TextArea from "antd/es/input/TextArea";
@@ -279,16 +279,29 @@ const Home = () => {
 
   useEffect(() => listenReceive());
 
+  // useEffect(() => {
+  //   return () => msgNotification();
+  //   // eslint-disable-next-line
+  // }, []);
+
   useEffect(() => {
-    return () => msgNotification();
+    if (!state?.user?.name && localStorage?.user)
+      dispatch(setUser(JSON.parse(localStorage?.user)));
     // eslint-disable-next-line
-  }, []);
+  }, [state.user]);
 
   return (
-    <div className="flex" style={{ height: "calc(max(100vh - 4rem , 36rem))" }}>
+    <div
+      className={`flex ${state?.darkMode && "bg-gray-800"}`}
+      style={{ height: "calc(max(100vh - 4rem , 36rem))" }}
+    >
       {/* Left Part  */}
       <div className="border w-1/4">
-        <div className="flex flex-col gap-3 px-5 py-3 sticky top-16 z-10 bg-white">
+        <div
+          className={`flex flex-col gap-3 px-5 py-3 sticky top-16 z-10 ${
+            state?.darkMode ? "bg-gray-800 text-white" : "bg-white"
+          }`}
+        >
           <div className="flex justify-between items-center">
             <span className="text-2xl">Chats</span>
             <span className="flex">
@@ -313,7 +326,9 @@ const Home = () => {
           />
         </div>
         <Tabs
-          className="flex w-full items-center"
+          className={`flex w-full items-center ${
+            state?.darkMode && "text-white"
+          }`}
           defaultActiveKey="1"
           onChange={onUserTabChange}
           items={items}
@@ -324,7 +339,11 @@ const Home = () => {
         {/* Chat Header  */}
         {state.selectedUser?.userName ? (
           <>
-            <div className="flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10 bg-white">
+            <div
+              className={`flex justify-between items-center gap-3 px-5 py-2 border-b sticky top-16 z-10  ${
+                state?.darkMode ? "bg-gray-800 text-white" : "bg-white"
+              }`}
+            >
               <Tooltip title="Info">
                 <Link to={`/user/${state?.selectedUser?._id}`}>
                   <div className="flex gap-3 cursor-pointer">
@@ -356,9 +375,11 @@ const Home = () => {
               {!state.selectedUser?.annonymous && (
                 <div className="flex gap-5 text-2xl text-gray-500">
                   <Tooltip title="Video Call">
-                    <span className="flex cursor-pointer">
-                      <ion-icon name="videocam-outline" />
-                    </span>
+                    <Link to={`/call/${state?.selectedUser?._id}`}>
+                      <span className="flex cursor-pointer">
+                        <ion-icon name="videocam-outline" />
+                      </span>
+                    </Link>
                   </Tooltip>
                   <Tooltip title="Call">
                     <span className="flex cursor-pointer">
@@ -386,12 +407,16 @@ const Home = () => {
               ))}
             </div>
             {/* Chat Footer  */}
-            <div className="flex justify-around items-center text-2xl text-gray-500 py-5 border-t bg-white sticky bottom-0">
+            <div
+              className={`flex justify-around items-center text-2xl text-gray-500 py-5 border-t ${
+                state?.darkMode ? "bg-gray-800 text-white" : "bg-white"
+              } sticky bottom-0`}
+            >
               <div className="cursor-pointer"></div>
               {emojiPannel && (
                 <div className="absolute bottom-20 z-20 left-2">
                   <EmojiPicker
-                    emojiStyle="facebook"
+                    emojiStyle={state?.user?.preferences?.emoji || "facebook"}
                     onEmojiClick={selectEmoji}
                   />
                 </div>
@@ -408,7 +433,11 @@ const Home = () => {
                 <ion-icon name="attach-outline" />
               </div>
               <TextArea
-                className="w-5/6"
+                className={`w-5/6 ${
+                  state?.darkMode
+                    ? "bg-gray-800 text-white placeholder-gray-400"
+                    : "bg-white"
+                }`}
                 rows={1}
                 ref={typeMessage}
                 id="type-message"
