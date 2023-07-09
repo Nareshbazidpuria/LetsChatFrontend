@@ -1,13 +1,29 @@
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { changePasswordApi } from "../../apis";
 
 const Security = () => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
+  const changePassword = async (payload) => {
+    try {
+      setLoading(true);
+      const res = await changePasswordApi(payload);
+      if (res?.status === 200) message.success(res?.data?.message);
+      else message.error(res?.data?.message);
+      setLoading(false);
+      form.resetFields();
+    } catch (error) {
+      setLoading(false);
+      message.error(error?.data?.message);
+    }
+  };
+
   const onFinish = async (payload) => {
-    console.log(payload);
-    setLoading(true);
+    delete payload.confirmPassword;
+    changePassword(payload);
   };
 
   return (
@@ -18,6 +34,7 @@ const Security = () => {
       <h1 className="text-2xl py-5 px-10">Change Password</h1>
       <div className="px-10">
         <Form
+          form={form}
           name="changePassword"
           className="login-form"
           initialValues={{
@@ -91,7 +108,7 @@ const Security = () => {
                 loading ? "cursor-no-drop" : "cursor-pointer"
               }`}
               disabled={loading}
-              htmlType="submit"
+              htmltype="submit"
             >
               Change
             </button>
