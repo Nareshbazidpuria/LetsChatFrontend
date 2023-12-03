@@ -83,7 +83,7 @@ const SignUp = () => {
               },
               {
                 max: 20,
-                message: "Username can be 16 character long",
+                message: "Username can be 20 character long",
               },
               {
                 pattern: /^(?![0-9_])[a-z0-9_]{3,30}$/,
