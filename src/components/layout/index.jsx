@@ -9,9 +9,17 @@ const Layout = () => {
     <>
       <Header />
       <Routes>
-        <Route key="home" path="/" element={<Home />} />
-        <Route key="profile" path="/profile/*" element={<Profile />} />
-        <Route key="userInfo" path="/user/:id" element={<UserInfo />} />
+        <Route key="home" path="/LetsChatFrontend/" element={<Home />} />
+        <Route
+          key="profile"
+          path="/LetsChatFrontend/profile/*"
+          element={<Profile />}
+        />
+        <Route
+          key="userInfo"
+          path="/LetsChatFrontend/user/:id"
+          element={<UserInfo />}
+        />
       </Routes>
     </>
   );
