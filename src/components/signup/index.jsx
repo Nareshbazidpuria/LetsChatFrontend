@@ -13,7 +13,7 @@ const SignUp = () => {
       const response = await signUpApi(payload);
       if (response?.status === 201) {
         message.success(response?.data?.message);
-        navigate("/signin");
+        navigate("/LetsChatFrontend/signin");
       } else message.success(response?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);
@@ -22,7 +22,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (localStorage.user) {
-      navigate("/");
+      navigate("/LetsChatFrontend");
     }
   }, [navigate]);
 
@@ -143,7 +143,7 @@ const SignUp = () => {
           </Form.Item>
 
           <div className="flex justify-between gap-5">
-            <Link to="/signin">
+            <Link to="/LetsChatFrontend/signin">
               <Form.Item>
                 <Button
                   className="login-form-button"

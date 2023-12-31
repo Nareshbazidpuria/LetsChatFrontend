@@ -21,7 +21,7 @@ const Login = () => {
           const user = profile?.data?.data;
           if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
           localStorage.setItem("user", JSON.stringify(user));
-          navigate("/");
+          navigate("/LetsChatFrontend");
         } else message.error(profile?.data?.message);
       } else message.error(response?.data?.message);
     } catch (error) {
@@ -31,7 +31,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.user) {
-      navigate("/");
+      navigate("/LetsChatFrontend");
     }
   }, [navigate]);
 
@@ -90,7 +90,7 @@ const Login = () => {
             />
           </Form.Item>
           <div className="flex justify-between gap-5">
-            <Link to="/signup">
+            <Link to="/LetsChatFrontend/signup">
               <Form.Item>
                 <Button
                   className="login-form-button"

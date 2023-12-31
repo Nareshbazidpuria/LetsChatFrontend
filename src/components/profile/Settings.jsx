@@ -15,7 +15,7 @@ const Settings = () => {
       if (response?.status === 200) {
         localStorage.clear();
         message.success(response?.data?.message);
-        navigate("/signin");
+        navigate("/LetsChatFrontend/signin");
       } else message.error(response?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);
@@ -28,7 +28,7 @@ const Settings = () => {
       if (response?.status === 200) {
         localStorage.clear();
         message.success(response?.data?.message);
-        navigate("/signin");
+        navigate("/LetsChatFrontend/signin");
       } else message.error(response?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);

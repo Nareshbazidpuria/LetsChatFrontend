@@ -1,4 +1,4 @@
-import { Input, Spin, Tabs, Tooltip, notification } from "antd";
+import { Input, Spin, Tabs, Tooltip } from "antd";
 import profile from "../../assets/img/profile.png";
 import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
@@ -118,30 +118,6 @@ const Home = () => {
         document.querySelector("#chat-body").scrollTop =
           chatBody.current?.scrollHeight + 1000;
       }, 200);
-    });
-  };
-
-  const msgNotification = () => {
-    socket.on("msgNotification", ({ message, by }) => {
-      if (by._id.toString() !== state.selectedUser?._id?.toString()) {
-        notification.info({
-          message: <span className="ml-3 font-bold">{by.name}</span>,
-          description: (
-            <div className="ml-3 flex gap-2 items-center text-xl">
-              <ion-icon name="chatbubble-ellipses-outline" />
-              <span className="text-base">{message?.message}</span>
-            </div>
-          ),
-          placement: "bottomRight",
-          icon: (
-            <img
-              src={by?.profilePic ? BaseUrl + by?.profilePic : profile}
-              alt=""
-              className="w-10 h-10 mt-1 rounded-full"
-            />
-          ),
-        });
-      }
     });
   };
 
@@ -351,7 +327,7 @@ const Home = () => {
               }`}
             >
               <Tooltip title="Info">
-                <Link to={`/user/${state?.selectedUser?._id}`}>
+                <Link to={`/LetsChatFrontend/user/${state?.selectedUser?._id}`}>
                   <div className="flex gap-3 cursor-pointer">
                     <img
                       className="h-14 w-14 rounded-full"
@@ -381,7 +357,9 @@ const Home = () => {
               {!state.selectedUser?.annonymous && (
                 <div className="flex gap-5 text-2xl text-gray-500">
                   <Tooltip title="Video Call">
-                    <Link to={`/call/${state?.selectedUser?._id}`}>
+                    <Link
+                      to={`/LetsChatFrontend/call/${state?.selectedUser?._id}`}
+                    >
                       <span className="flex cursor-pointer">
                         <ion-icon name="videocam-outline" />
                       </span>

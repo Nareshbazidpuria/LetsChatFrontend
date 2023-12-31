@@ -21,7 +21,7 @@ const Call = () => {
         userVideo.current.srcObject = stream;
       });
   }, []);
-  
+
   return (
     <div className="h-screen relative flex justify-center items-center bg-gray-950">
       <span className="text-white absolute top-2 left-4 text-xl">
@@ -46,7 +46,7 @@ const Call = () => {
             className="min-h-screen"
           />
           <div className="fixed bottom-5  transition-all">
-            <Link to="/">
+            <Link to="/LetsChatFrontend">
               <span
                 className="text-white bg-red-600 flex rounded-full text-4xl p-3 cursor-pointer"
                 style={{ transform: "rotate(135deg)" }}

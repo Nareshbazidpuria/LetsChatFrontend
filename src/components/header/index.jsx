@@ -17,7 +17,7 @@ const Header = () => {
       } sticky top-0 z-10`}
     >
       <div className="flex items-center gap-5">
-        <Link to="/">
+        <Link to="/LetsChatFrontend">
           <div className="flex items-center gap-3 cursor-pointer">
             <img className="h-10" src={logo} alt="" />
             <span>Let's Chat</span>

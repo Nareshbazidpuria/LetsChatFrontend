@@ -7,13 +7,17 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     if (!localStorage.user) {
-      navigate("/signin");
+      navigate("/LetsChatFrontend/signin");
     }
   }, [navigate]);
   return (
     <>
       <Routes>
-        <Route key="call" path="/call/:userId" element={<Call />} />
+        <Route
+          key="call"
+          path="/LetsChatFrontend/call/:userId"
+          element={<Call />}
+        />
         <Route key="layout" path="/*" element={<Layout />} />
       </Routes>
     </>
