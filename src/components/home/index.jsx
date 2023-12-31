@@ -57,7 +57,7 @@ const Home = () => {
     message = message?.trim();
     if (message) {
       socket.emit("message", {
-        message,
+        message: { message },
         roomId: state?.selectedUser?.room?._id,
       });
       setMessages([
@@ -101,10 +101,16 @@ const Home = () => {
   };
 
   const listenReceive = () => {
-    socket.on("receive", ({ message, createdAt }) => {
+    socket.on("receive", (msg) => {
       setMessages([
         ...messages,
-        { message, createdAt, type: MESSAGE_TYPE.INCOMMING },
+        {
+          ...msg,
+          type:
+            msg?.sentBy === JSON.parse(localStorage.user)._id
+              ? MESSAGE_TYPE.OUTGOING
+              : MESSAGE_TYPE.INCOMMING,
+        },
       ]);
       document.querySelector("#chat-body").scrollTop =
         chatBody.current?.scrollHeight;

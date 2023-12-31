@@ -1,5 +1,7 @@
 import { MESSAGE_TYPE } from "../../constant";
 import moment from "moment/moment";
+import { CONTENT_TYPE } from "../../utils/constant";
+import { BaseUrl } from "../../axios/index";
 
 const Message = ({ message }) => {
   return (
@@ -14,7 +16,15 @@ const Message = ({ message }) => {
             : ".5rem .5rem 0 .5rem",
       }}
     >
-      <p>{message?.message}</p>
+      {message.contentType === CONTENT_TYPE.IMAGE ? (
+        <img
+          src={BaseUrl + message?.message}
+          alt="Message"
+          className="max-h-96"
+        />
+      ) : (
+        <p>{message?.message}</p>
+      )}
       <span className="flex gap-1 text-xs text-gray-400 float-right">
         {message?.type === MESSAGE_TYPE?.OUTGOING && (
           <span className="flex text-base text-sky-400">

@@ -8,6 +8,7 @@ import { BaseUrl } from "../../axios";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const onFinish = async (payload) => {
     try {
       delete payload.confirmPassword;
@@ -17,7 +18,7 @@ const Login = () => {
         const profile = await getProfileApi();
         if (profile?.status === 200) {
           message.success(response?.data?.message);
-          const user = profile?.data?.data
+          const user = profile?.data?.data;
           if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
           localStorage.setItem("user", JSON.stringify(user));
           navigate("/");
