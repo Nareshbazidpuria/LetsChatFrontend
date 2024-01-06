@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/LetsChatFrontend/static/css/main.ee1ff2f1.css",
-    "main.js": "/LetsChatFrontend/static/js/main.340312eb.js",
+    "main.css": "/LetsChatFrontend/static/css/main.4633b496.css",
+    "main.js": "/LetsChatFrontend/static/js/main.e5c18d10.js",
     "static/js/787.f1f7ef96.chunk.js": "/LetsChatFrontend/static/js/787.f1f7ef96.chunk.js",
     "static/media/LetsChatAndroid.apk": "/LetsChatFrontend/static/media/LetsChatAndroid.e6b0d929fb17b06749a7.apk",
     "static/media/random.gif": "/LetsChatFrontend/static/media/random.e48628e4b622247d6942.gif",
@@ -11,12 +11,12 @@
     "static/media/android.png": "/LetsChatFrontend/static/media/android.b6a7261ea091f70d6b82.png",
     "static/media/profile.png": "/LetsChatFrontend/static/media/profile.6b0611da728ce658b29f.png",
     "index.html": "/LetsChatFrontend/index.html",
-    "main.ee1ff2f1.css.map": "/LetsChatFrontend/static/css/main.ee1ff2f1.css.map",
-    "main.340312eb.js.map": "/LetsChatFrontend/static/js/main.340312eb.js.map",
+    "main.4633b496.css.map": "/LetsChatFrontend/static/css/main.4633b496.css.map",
+    "main.e5c18d10.js.map": "/LetsChatFrontend/static/js/main.e5c18d10.js.map",
     "787.f1f7ef96.chunk.js.map": "/LetsChatFrontend/static/js/787.f1f7ef96.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ee1ff2f1.css",
-    "static/js/main.340312eb.js"
+    "static/css/main.4633b496.css",
+    "static/js/main.e5c18d10.js"
   ]
 }
