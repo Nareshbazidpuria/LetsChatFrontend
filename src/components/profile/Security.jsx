@@ -32,7 +32,7 @@ const Security = () => {
       style={{ minHeight: "calc(100vh - 5.5rem)" }}
     >
       <h1 className="text-2xl py-5 px-10">Change Password</h1>
-      <div className="px-10">
+      <div className="px-10 w-96">
         <Form
           form={form}
           name="changePassword"

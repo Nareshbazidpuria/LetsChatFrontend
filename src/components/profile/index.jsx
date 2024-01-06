@@ -19,7 +19,7 @@ const Profile = () => {
 
   return (
     <div className="flex" style={{ height: "calc(max(100vh - 4rem , 36rem))" }}>
-      <div className="border w-1/4">
+      <div className="border lg:w-1/4 md:w-1/4 sm:w-1/4 w-0 overflow-hidden">
         <div className="flex gap-3 py-6 px-4 text-xl items-center bg-slate-50">
           <span className="flex text-3xl">
             <ion-icon name="person-circle-outline" />
@@ -62,7 +62,7 @@ const Profile = () => {
           onClick={() => setActive("settings")}
         />
       </div>
-      <div className="border border-l-0 w-3/4 relative bg-slate-50">
+      <div className="border border-l-0 lg:w-3/4 md:w-3/4 sm:w-3/4 w-full relative bg-slate-50">
         <Routes>
           <Route key="general" path="/" element={<General />} />
           <Route key="edit" path="/edit" element={<Edit />} />

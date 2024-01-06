@@ -28,7 +28,7 @@ const General = () => {
 
   return (
     <div
-      className="flex flex-col gap-4 bg-white m-3 rounded-xl overflow-hidden shadow"
+      className="flex flex-col gap-4 bg-white lg:m-3 md:m-3 sm:m-3 m-0 lg:rounded-xl md:rounded-xl sm:rounded-xl rounded-none overflow-hidden shadow"
       style={{ minHeight: "calc(100vh - 5.5rem)" }}
     >
       <Cover user={user} />

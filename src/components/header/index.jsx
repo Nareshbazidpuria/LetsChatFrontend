@@ -16,8 +16,11 @@ const Header = () => {
         state?.darkMode ? "bg-gray-800 text-white" : "bg-slate-100"
       } sticky top-0 z-10`}
     >
-      <div className="flex items-center gap-5">
-        <Link to="/LetsChatFrontend">
+      <div className="flex items-center lg:gap-5 md:gap-5 sm:gap-5 gap-0">
+        <Link
+          to="/LetsChatFrontend"
+          className="lg:w-fit md:w-fit sm:w-fit w-0 overflow-hidden"
+        >
           <div className="flex items-center gap-3 cursor-pointer">
             <img className="h-10" src={logo} alt="" />
             <span>Let's Chat</span>

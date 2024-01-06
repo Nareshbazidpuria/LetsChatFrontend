@@ -261,11 +261,6 @@ const Home = () => {
 
   useEffect(() => listenReceive());
 
-  // useEffect(() => {
-  //   return () => msgNotification();
-  //   // eslint-disable-next-line
-  // }, []);
-
   useEffect(() => {
     if (!state?.user?.name && localStorage?.user)
       dispatch(setUser(JSON.parse(localStorage?.user)));
@@ -278,7 +273,10 @@ const Home = () => {
       style={{ height: "calc(max(100vh - 4rem , 36rem))" }}
     >
       {/* Left Part  */}
-      <div className="border w-1/4">
+      <div className="border lg:w-1/4 md:w-1/4 sm:w-1/4 w-full">
+        <div className="lg:hidden md:hidden sm:hidden text-center p-2 border-b">
+          👆 To use all features, please download app or run in desktop mode
+        </div>
         <div
           className={`flex flex-col gap-3 px-5 py-3 sticky top-16 z-10 ${
             state?.darkMode ? "bg-gray-800 text-white" : "bg-white"
@@ -317,7 +315,7 @@ const Home = () => {
         />
       </div>
       {/* Right Part  */}
-      <div className="border border-l-0 w-3/4 relative">
+      <div className="border border-l-0 relative w-3/4 lg:block md:block sm:block hidden">
         {/* Chat Header  */}
         {state.selectedUser?.userName ? (
           <>
