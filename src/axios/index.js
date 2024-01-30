@@ -1,7 +1,6 @@
 import axios from "axios";
 
-export const BaseUrl = "http://192.168.46.201:4000";
-// export const BaseUrl = process.env.REACT_APP_DEV_URL;
+export const BaseUrl = process.env.REACT_APP_DEV_URL;
 
 const axiosInstance = axios.create({
   baseURL: BaseUrl,
