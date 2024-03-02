@@ -1,4 +1,4 @@
-import { Input, Spin, Tabs, Tooltip } from "antd";
+import { Input, Spin, Tabs, Tooltip, Upload, message } from "antd";
 import profile from "../../assets/img/profile.png";
 import verified from "../../assets/img/verified.png";
 import random from "../../assets/img/random.gif";
@@ -8,7 +8,13 @@ import { useEffect, useRef, useState } from "react";
 import Chat from "../chat";
 import Message from "../message";
 import { MESSAGE_TYPE } from "../../constant";
-import { getMsgsApi, getReqsApi, getUsersApi, sendMsgApi } from "../../apis";
+import {
+  getMsgsApi,
+  getReqsApi,
+  getUsersApi,
+  sendMsgApi,
+  uploadImageApi,
+} from "../../apis";
 import { BaseUrl } from "../../axios";
 import logo from "../../assets/img/logo.png";
 import { connectToSocketApi, socket } from "../../apis/socket";
@@ -21,6 +27,7 @@ import Requests from "./Requests";
 import TextArea from "antd/es/input/TextArea";
 import EmojiPicker from "emoji-picker-react";
 import { Link } from "react-router-dom";
+import { CONTENT_TYPE } from "../../utils/constant";
 
 const Home = () => {
   const state = useSelector((state) => state);
@@ -52,17 +59,22 @@ const Home = () => {
     }
   };
 
-  const send = (message, e) => {
+  const send = (message, e, contentType = CONTENT_TYPE.TEXT) => {
     if (e) e.preventDefault();
     message = message?.trim();
     if (message) {
       socket.emit("message", {
-        message: { message },
+        message: { message, contentType },
         roomId: state?.selectedUser?.room?._id,
       });
       setMessages([
         ...messages,
-        { message, createdAt: new Date(), type: MESSAGE_TYPE.OUTGOING },
+        {
+          message,
+          contentType,
+          createdAt: new Date(),
+          type: MESSAGE_TYPE.OUTGOING,
+        },
       ]);
       sendMessage(state?.selectedUser?.room?._id, msg);
       setMsg("");
@@ -217,6 +229,27 @@ const Home = () => {
       if (scrollTop + clientHeight === scrollHeight) {
         peoplePagination();
       }
+    }
+  };
+
+  const uploadImage = async ({ file }) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      let res = await uploadImageApi(formData);
+      if (res?.status === 200)
+        send(
+          res?.data?.data?.src,
+          null,
+          ["png", "jpg", "jpeg"].includes(
+            res?.data?.data?.src?.split(".").pop()
+          )
+            ? CONTENT_TYPE.IMAGE
+            : CONTENT_TYPE.VIDEO
+        );
+    } catch (error) {
+      console.log(error);
+      if (error?.data?.message) message.error(error?.data?.message);
     }
   };
 
@@ -411,9 +444,15 @@ const Home = () => {
               >
                 <ion-icon name={`${emojiPannel ? "close" : "happy"}-outline`} />
               </div>
-              <div className="rotate-45 cursor-pointer">
-                <ion-icon name="attach-outline" />
-              </div>
+              <Upload
+                name="file"
+                customRequest={uploadImage}
+                accept="image/png, image/jpeg, image/jpg, video/*"
+              >
+                <div className="rotate-45 cursor-pointer text-2xl">
+                  <ion-icon name="attach-outline" />
+                </div>
+              </Upload>
               <TextArea
                 className={`w-5/6 ${
                   state?.darkMode

@@ -16,7 +16,24 @@ const Message = ({ message }) => {
             : ".5rem .5rem 0 .5rem",
       }}
     >
-      {message.contentType === CONTENT_TYPE.IMAGE ? (
+      {{
+        [CONTENT_TYPE.IMAGE]: (
+          <img
+            src={BaseUrl + message?.message}
+            alt="Message"
+            className="max-h-96"
+          />
+        ),
+        [CONTENT_TYPE.VIDEO]: (
+          <video
+            src={BaseUrl + message?.message}
+            controls
+            // alt="Message"
+            // className="max-h-96"
+          />
+        ),
+      }[message.contentType] || <p>{message?.message}</p>}
+      {/* {message.contentType === CONTENT_TYPE.IMAGE ? (
         <img
           src={BaseUrl + message?.message}
           alt="Message"
@@ -24,7 +41,7 @@ const Message = ({ message }) => {
         />
       ) : (
         <p>{message?.message}</p>
-      )}
+      )} */}
       <span className="flex gap-1 text-xs text-gray-400 float-right">
         {message?.type === MESSAGE_TYPE?.OUTGOING && (
           <span className="flex text-base text-sky-400">
