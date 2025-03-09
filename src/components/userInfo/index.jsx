@@ -145,7 +145,7 @@ const UserInfo = () => {
                 className="flex cursor-pointer text-2xl"
                 onClick={() => {
                   dispatch(setSelectedUser(user));
-                  navigate("/LetsChatFrontend");
+                  navigate("/");
                 }}
               >
                 <ion-icon name="chatbubble-ellipses-outline" />

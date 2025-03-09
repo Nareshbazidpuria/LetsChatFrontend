@@ -21,7 +21,7 @@ const Login = () => {
           const user = profile?.data?.data;
           if (user?.profilePic) user.profilePic = BaseUrl + user.profilePic;
           localStorage.setItem("user", JSON.stringify(user));
-          navigate("/LetsChatFrontend");
+          navigate("/");
         } else message.error(profile?.data?.message);
       } else message.error(response?.data?.message);
     } catch (error) {
@@ -31,7 +31,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.user) {
-      navigate("/LetsChatFrontend");
+      navigate("/");
     }
   }, [navigate]);
 
@@ -89,7 +89,7 @@ const Login = () => {
             />
           </Form.Item>
           <div className="flex justify-between lg:w-full md:w-full sm:w-4/5 w-4/5 gap-5">
-            <Link to="/LetsChatFrontend/signup" className="w-1/2">
+            <Link to="/signup" className="w-1/2">
               <Form.Item className="w-full">
                 <Button className="login-form-button text-lg w-full rounded-none py-1 text-[var(--primary)] h-14">
                   Sign Up

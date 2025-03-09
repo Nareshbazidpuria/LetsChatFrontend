@@ -9,15 +9,15 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     if (!localStorage.user) {
-      navigate("/LetsChatFrontend/signin");
+      navigate("/signin");
     }
-  }, [navigate]);
+  }, []);
   return (
     <>
       <Routes>
         <Route
           key="call"
-          path="/LetsChatFrontend/call/:userId"
+          path="/call/:userId"
           // element={<LobbyScreen />}
           element={<Call />}
         />

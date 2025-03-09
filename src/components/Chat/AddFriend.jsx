@@ -58,7 +58,7 @@ const AddFriend = ({ userr, add }) => {
             alt=""
           />
           <div className="w-4/5 flex justify-between items-center">
-            <Link to={`/LetsChatFrontend/user/${user?._id}`}>
+            <Link to={`/user/${user?._id}`}>
               <Tooltip title="View">
                 <div className="flex flex-col cursor-pointer">
                   <span>{user?.name}</span>

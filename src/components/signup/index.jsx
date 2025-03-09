@@ -12,7 +12,7 @@ const SignUp = () => {
       const response = await signUpApi(payload);
       if (response?.status === 201) {
         message.success(response?.data?.message);
-        navigate("/LetsChatFrontend/signin");
+        navigate("/signin");
       } else message.success(response?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);
@@ -21,7 +21,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (localStorage.user) {
-      navigate("/LetsChatFrontend");
+      navigate("/");
     }
   }, [navigate]);
 
@@ -148,7 +148,7 @@ const SignUp = () => {
             />
           </Form.Item>
           <div className="flex justify-between lg:w-full md:w-full sm:w-4/5 w-4/5 gap-5">
-            <Link to="/LetsChatFrontend/signin" className="w-1/2">
+            <Link to="/signin" className="w-1/2">
               <Form.Item className="w-full">
                 <Button className="login-form-button text-lg w-full rounded-none py-1 text-[var(--primary)] h-14">
                   Login
@@ -165,7 +165,7 @@ const SignUp = () => {
             </Form.Item>
           </div>
           {/* <div className="flex justify-between lg:w-full md:w-full sm:w-4/5 w-4/5 gap-5">
-            <Link to="/LetsChatFrontend/signin" className="w-1/2">
+            <Link to="/signin" className="w-1/2">
               <Form.Item className="w-full">
                 <Button className="login-form-button text-lg w-full rounded-none py-1 text-[var(--primary)] h-14">
                   Sign Up

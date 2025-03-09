@@ -46,9 +46,7 @@ const Call = () => {
             className="min-h-screen"
           />
           <div className="fixed bottom-5  transition-all">
-            <Link
-              to="/LetsChatFrontend"
-            >
+            <Link to="/">
               <span
                 className="text-white bg-red-600 flex rounded-full text-4xl p-3 cursor-pointer"
                 style={{ transform: "rotate(135deg)" }}

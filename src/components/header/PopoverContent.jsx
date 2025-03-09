@@ -10,7 +10,7 @@ const PopoverContent = () => {
       if (response?.status === 200) {
         localStorage.clear();
         message.success(response?.data?.message);
-        navigate("/LetsChatFrontend/signin");
+        navigate("/signin");
       } else message.error(response?.data?.message);
     } catch (error) {
       message.error(error?.data?.message);
@@ -18,7 +18,7 @@ const PopoverContent = () => {
   };
   return (
     <div className="w-32 py-2">
-      <Link to="/LetsChatFrontend/profile">
+      <Link to="/profile">
         <div className="flex items-center gap-1 cursor-pointer hover:bg-slate-100 px-2 py-1">
           <span className="flex text-lg">
             <ion-icon name="person-circle-outline" />

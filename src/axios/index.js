@@ -1,10 +1,8 @@
 import axios from "axios";
 
-export const BaseUrl = process.env.REACT_APP_DEV_URL;
+export const BaseUrl = "http://13.203.78.221:4000";
 
-const axiosInstance = axios.create({
-  baseURL: BaseUrl,
-});
+const axiosInstance = axios.create({ baseURL: BaseUrl });
 
 axiosInstance.interceptors.response.use(
   (response) => response,

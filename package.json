@@ -1,7 +1,6 @@
 {
   "name": "letschat",
   "version": "0.1.0",
-  "homepage": "http://Nareshbazidpuria.github.io/LetsChatFrontend",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.0.1",

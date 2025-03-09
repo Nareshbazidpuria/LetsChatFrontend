@@ -40,7 +40,7 @@ const General = () => {
           <span>{user?.friends || 0}</span>
           <span>Friends</span>
         </div>
-        <Link to="/LetsChatFrontend/profile/edit">
+        <Link to="/profile/edit">
           <div className="bg-sky-500 text-white px-5 py-2 mt-4 rounded w-32 cursor-pointer text-base">
             Edit Profile
           </div>

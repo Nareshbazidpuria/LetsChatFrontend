@@ -358,7 +358,7 @@ const Home = () => {
               }`}
             >
               <Tooltip title="Info">
-                <Link to={`/LetsChatFrontend/user/${state?.selectedUser?._id}`}>
+                <Link to={`/user/${state?.selectedUser?._id}`}>
                   <div className="flex gap-3 cursor-pointer">
                     <img
                       className="h-14 w-14 rounded-full"
@@ -388,9 +388,7 @@ const Home = () => {
               {!state.selectedUser?.annonymous && (
                 <div className="flex gap-5 text-2xl text-gray-500">
                   <Tooltip title="Video Call">
-                    <Link
-                      to={`/LetsChatFrontend/call/${state?.selectedUser?._id}`}
-                    >
+                    <Link to={`/call/${state?.selectedUser?._id}`}>
                       <span className="flex cursor-pointer">
                         <ion-icon name="videocam-outline" />
                       </span>

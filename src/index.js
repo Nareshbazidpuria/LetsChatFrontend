@@ -15,12 +15,8 @@ root.render(
     <React.StrictMode>
       <BrowserRouter>
         <Routes>
-          <Route path="/LetsChatFrontend/signin" element={<Login />} />
-          <Route
-            key="signup"
-            path="/LetsChatFrontend/signup"
-            element={<SignUp />}
-          />
+          <Route path="/signin" element={<Login />} />
+          <Route key="signup" path="/signup" element={<SignUp />} />
           <Route path="*" element={<App />} />
         </Routes>
       </BrowserRouter>
