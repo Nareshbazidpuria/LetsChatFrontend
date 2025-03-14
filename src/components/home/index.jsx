@@ -154,6 +154,7 @@ const Home = () => {
       setLoadingChat(true);
       setMessages([]);
       if (user?.room?._id) {
+        socket.emit("join", user.room._id);
         let res = await getMsgsApi(user.room._id, 1);
         if (
           res?.status === 200 &&

@@ -1,30 +1,31 @@
-import { useEffect, useRef, useState } from "react";
-import Draggable from "react-draggable";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+// import { useEffect, useRef, useState } from "react";
+// import Draggable from "react-draggable";
+// import { useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
 
 const Call = () => {
-  const state = useSelector((state) => state);
-  const [stream, setStream] = useState();
-  const myVideo = useRef();
-  const userVideo = useRef();
+  // const state = useSelector((state) => state);
+  // const [stream, setStream] = useState();
+  // const myVideo = useRef();
+  // const userVideo = useRef();
 
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: true,
-        audio: true,
-      })
-      .then((stream) => {
-        setStream(stream);
-        myVideo.current.srcObject = stream;
-        userVideo.current.srcObject = stream;
-      });
-  }, []);
+  // useEffect(() => {
+  //   navigator.mediaDevices
+  //     .getUserMedia({
+  //       video: true,
+  //       audio: true,
+  //     })
+  //     .then((stream) => {
+  //       setStream(stream);
+  //       myVideo.current.srcObject = stream;
+  //       userVideo.current.srcObject = stream;
+  //     });
+  // }, []);
 
   return (
-    <div className="h-screen relative flex justify-center items-center bg-gray-950">
-      <span className="text-white absolute top-2 left-4 text-xl">
+    <div className="h-screen relative flex justify-center items-center">
+      {/* <div className="h-screen relative flex justify-center items-center bg-gray-950"> */}
+      {/* <span className="text-white absolute top-2 left-4 text-xl">
         {state?.selectedUser?.name || ""}
       </span>
       {stream ? (
@@ -58,7 +59,8 @@ const Call = () => {
         </>
       ) : (
         <div className="text-white">calling</div>
-      )}
+      )} */}
+      Comming soon...
     </div>
   );
 };
